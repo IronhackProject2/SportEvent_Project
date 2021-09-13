@@ -3,6 +3,7 @@ const { startSession } = require("../models/Event");
 const Event = require('../models/Event');
 const User = require('../models/User.model');
 
+//my new comments
 
 router.get('/events', (req, res, next) => {
   // get all events from the database
