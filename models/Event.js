@@ -9,7 +9,9 @@ const eventSchema = new Schema({
         // so this is the part connecting to the authors collection
         ref: 'User.model'
     },
-    location: String
+    location: String,
+    startTime: Date,
+    endTime: Date
 });
 
 const Event = mongoose.model('Event', eventSchema);

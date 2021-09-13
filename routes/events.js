@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { startSession } = require("../models/Event");
 const Event = require('../models/Event');
 const User = require('../models/User.model');
 
@@ -22,12 +23,13 @@ router.get('/events/add', (req, res, next) => {
 
 router.post('/events/add', (req, res, next) => {
   console.log(req.body);
-  const { title, description, location } = req.body;
+  const { title, description, location, startTime, endTime } = req.body;
   Event.create({
     title: title,
     description: description,
     location: location,
-    
+    startTime: startTime,
+    endTime: endTime
     // creator: this will have to come from the cookie?
   })
   .then(createdEvent => {
