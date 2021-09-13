@@ -62,9 +62,13 @@ router.get('/events/edit/:id', (req, res, next) => {
     // here the problem ////
     const startTime = eventFromDB.timeAndDate.starting.toISOString().split("T")[1].split(".")[0]; 
     const endTime = eventFromDB.timeAndDate.ending.toISOString().split("T")[1].split(".")[0];
+    const startDate = eventFromDB.timeAndDate.starting.toISOString().split("T")[0]; 
+    const endDate = eventFromDB.timeAndDate.ending.toISOString().split("T")[0];
     console.log("start time: ----------- ", startTime)
+    console.log("start date: ----------- ", startDate)
     console.log("end time: ----------- ", endTime)
-    res.render('event/eventEdit', { event: eventFromDB, startTime: startTime, endTime: endTime });
+    console.log("end date: ----------- ", endDate)
+    res.render('event/eventEdit', { event: eventFromDB, startTime: startTime, startDate: startDate, endTime: endTime });
   })
   .catch(err => {
     next(err);
