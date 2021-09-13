@@ -6,7 +6,7 @@ const eventSchema = new Schema({
     creator: {
         // to connect a schema from  an other document
         type: Schema.Types.ObjectId,
-        // so this is the part connecting to the authors colecion
+        // so this is the part connecting to the authors collection
         ref: 'User.model'
     },
     location: {
