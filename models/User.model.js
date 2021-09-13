@@ -7,6 +7,8 @@ const userSchema = new Schema({
     // unique: true -> Ideally, should be unique, but its up to you
   },
   password: String,
+  githubId: String,
+  avatar: String
 });
 
 const User = model("User", userSchema);
