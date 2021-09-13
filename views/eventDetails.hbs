@@ -9,28 +9,5 @@
 	<p>Location: {{ location }}</p>
 
 	<a href="/events/edit/{{_id}}">Edit this event </a>
-    <a href="/events/delete/{{_id}}">Delete this event </a> 
+    {{!-- <a href="/events/delete/{{_id}}">Delete this event </a>  --}}
 {{/with}}
-
-{{!-- <h3>Reviews</h3> --}}
-
-{{!-- List the reviews --}}
-{{!-- {{#if book.reviews}}
-	{{#each book.reviews}}
-		<div>
-			<p>{{text}}</p>
-			<p>Added by: {{user}}</p>
-		</div>
-	{{/each}}
-{{else}}
-<p>No reviews yet</p>
-{{/if}}
-
-<h3>Add a review</h3>
-<form action="/books/{{book._id}}/reviews" method="POST">
-	<label for="user">Your name: </label>
-	<input type="text" name="user" id="user">
-	<label for="text">Your review: </label>
-	<input type="text" name="text" id="text">
-	<button type="submit">Add this review</button>
-</form> --}}

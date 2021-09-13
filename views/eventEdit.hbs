@@ -1,0 +1,21 @@
+{{#with event}}
+	<h1>Edit this event</h1>
+	<form action="/events/edit/{{_id}}" method="POST">
+		<label for="title">Title: </label>
+		<input type="text" name="title" id="title" value="{{title}}">
+
+		<label for="description">Description: </label>
+		<input type="text" name="description" id="description" value="{{description}}">
+
+		<label for="startDate">Beginning: </label>
+		<input type="date" name="startDate" id="startDate" >
+		<input type="time" name="startTime" id="startTime" value="{{startTime}}">
+
+    	<label for="endDate">Ending: </label>
+		<input type="date" name="endDate" id="endDate">
+		<input type="time" name="endTime" id="endTime" value="{{endTime}}">
+
+		<button type="submit">Update this event</button>
+	</form>
+    <a href="/events/delete/{{_id}}">Delete this event </a> 
+{{/with}}
