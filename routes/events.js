@@ -28,11 +28,13 @@ router.post('/events/add', (req, res, next) => {
   // converting form date 
   const start = startDate.split('-').concat(startTime.split(':'))
   const end = endDate.split('-').concat(endTime.split(':'))
-  
+  console.log("------------- start:", start)
+  console.log("------------- end:", end)
   // Date.UTC(year, month, day, hour, minute)
-  const utcStarting = new Date(Date.UTC(start[0], start[1], start[2], start[3], start[4]));
-  const utcEnding = new Date(Date.UTC(end[0], end[1], end[2], end[3], end[4]));
-  
+  const utcStarting = new Date(start[0], start[1], start[2], start[3], start[4]);
+  const utcEnding = new Date(end[0], end[1], end[2], end[3], end[4]);
+  console.log("------------- utcStarting:", utcStarting)
+  console.log("------------- utcEnding:", utcEnding)
   Event.create({
     title: title,
     description: description,
@@ -79,8 +81,8 @@ router.post('/events/edit/:id', (req, res, next) => {
   const end = endDate.split('-').concat(endTime.split(':'))
   
   // Date.UTC(year, month, day, hour, minute)
-  const utcStarting = new Date(Date.UTC(start[0], start[1], start[2], start[3], start[4]));
-  const utcEnding = new Date(Date.UTC(end[0], end[1], end[2], end[3], end[4]));
+  const utcStarting = new Date(start[0], start[1], start[2], start[3], start[4]);
+  const utcEnding = new Date(end[0], end[1], end[2], end[3], end[4]);
 	
 	// if findByIdAndUpdate() should return the updated event -> add {new: true}
 	Event.findByIdAndUpdate(eventId, {
