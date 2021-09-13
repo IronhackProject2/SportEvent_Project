@@ -10,9 +10,9 @@ const eventSchema = new Schema({
         // so this is the part connecting to the authors collection
         ref: 'User.model'
     },
-    timeAndDate {
-        startTime: Date,
-        endTime: Date,
+    timeAndDate: {
+        starting: Date,
+        ending: Date,
     }
 });
 
