@@ -1,13 +1,12 @@
 {{#with event}}
 	<h1> Information about {{ title }} </h1>
 	<h3>Details:</h3>
-	
 	<p>{{ description }}</p>
-	<p> From: {{ timeAndDate.starting}}</p>
+	<p> Fromfffffffff: {{ timeAndDate.starting}}</p>
 	<p> To: {{ timeAndDate.ending}}</p>
-	
 	<p>Location: {{ location }}</p>
-
 	<a href="/events/edit/{{_id}}">Edit this event </a>
-    {{!-- <a href="/events/delete/{{_id}}">Delete this event </a>  --}}
+    <div id='map' style='width: 400px; height: 300px;'></div>
+	<script src="/js/mapbox.js"></script>	
 {{/with}}
+<p>do I work?</p>
