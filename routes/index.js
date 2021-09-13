@@ -23,4 +23,5 @@ router.get('/profile', loginCheck(), (req, res, next) => {
   const loggedInUser = req.user;
   res.render('user/profile', { user: loggedInUser });
 })
+
 module.exports = router;

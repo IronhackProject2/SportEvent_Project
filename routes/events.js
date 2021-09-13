@@ -4,13 +4,14 @@ const Event = require('../models/Event');
 const User = require('../models/User.model');
 const { loginCheck } = require('./middlewares');
 
+//my new comments
 
 router.get('/events', (req, res, next) => {
   // get all events from the database
   Event.find()
   .then(eventsFromDB => {
     console.log('-------- all events: ', eventsFromDB);
-    res.render('events', { eventList: eventsFromDB });
+    res.render('event/events', { eventList: eventsFromDB });
   })
   .catch(err => {
     next(err);
@@ -18,7 +19,7 @@ router.get('/events', (req, res, next) => {
 });
 
 router.get('/events/add', (req, res, next) => {
-  res.render('eventForm');
+  res.render('event/eventForm');
 });
 
 router.post('/events/add', loginCheck(), (req, res, next) => {
@@ -28,11 +29,13 @@ router.post('/events/add', loginCheck(), (req, res, next) => {
   // converting form date 
   const start = startDate.split('-').concat(startTime.split(':'))
   const end = endDate.split('-').concat(endTime.split(':'))
-  
+  console.log("------------- start:", start)
+  console.log("------------- end:", end)
   // Date.UTC(year, month, day, hour, minute)
-  const utcStarting = new Date(Date.UTC(start[0], start[1], start[2], start[3], start[4]));
-  const utcEnding = new Date(Date.UTC(end[0], end[1], end[2], end[3], end[4]));
-  
+  const utcStarting = new Date(start[0], start[1], start[2], start[3], start[4]);
+  const utcEnding = new Date(end[0], end[1], end[2], end[3], end[4]);
+  console.log("------------- utcStarting:", utcStarting)
+  console.log("------------- utcEnding:", utcEnding)
   Event.create({
     title: title,
     description: description,
@@ -60,17 +63,23 @@ router.get('/events/edit/:id', loginCheck(), (req, res, next) => {
     // here the problem ////
     const startTime = eventFromDB.timeAndDate.starting.toISOString().split("T")[1].split(".")[0]; 
     const endTime = eventFromDB.timeAndDate.ending.toISOString().split("T")[1].split(".")[0];
-    // console.log("start time: ----------- ", startTime)
-    // console.log("end time: ----------- ", endTime)
+    
+    const startDate = eventFromDB.timeAndDate.starting.toISOString().split("T")[0]; 
+    const endDate = eventFromDB.timeAndDate.ending.toISOString().split("T")[0];
+    console.log("start time: ----------- ", startTime)
+    console.log("start date: ----------- ", startDate)
+    console.log("end time: ----------- ", endTime)
+    console.log("end date: ----------- ", endDate)
     
     //// console.log(typeof loggedInUser._id);
     //// console.log(typeof eventFromDB.creator);
     //// console.log(loggedInUser._id.toString() === eventFromDB.creator.toString());
     if (loggedInUser._id.toString() === eventFromDB.creator.toString() || loggedInUser.role === 'admin') {
-      res.render('eventEdit', { event: eventFromDB, startTime: startTime, endTime: endTime });
+       res.render('event/eventEdit', { event: eventFromDB, startTime: startTime, startDate: startDate, endTime: endTime });
     } else {
       res.redirect(`/events/${eventId}`)
     }
+
   })
   .catch(err => {
     next(err);
@@ -87,8 +96,8 @@ router.post('/events/edit/:id', (req, res, next) => {
   const end = endDate.split('-').concat(endTime.split(':'))
   
   // Date.UTC(year, month, day, hour, minute)
-  const utcStarting = new Date(Date.UTC(start[0], start[1], start[2], start[3], start[4]));
-  const utcEnding = new Date(Date.UTC(end[0], end[1], end[2], end[3], end[4]));
+  const utcStarting = new Date(start[0], start[1], start[2], start[3], start[4]);
+  const utcEnding = new Date(end[0], end[1], end[2], end[3], end[4]);
 	
 	// if findByIdAndUpdate() should return the updated event -> add {new: true}
 	Event.findByIdAndUpdate(eventId, {
@@ -131,7 +140,8 @@ router.get('/events/:id', (req, res, next) => {
   const eventId = req.params.id;
   Event.findById(eventId).populate('creator')
   .then(eventFromDB => {
-    res.render('eventDetails', { event: eventFromDB });
+    console.log(eventFromDB);
+    res.render('event/eventDetails', { event: eventFromDB });
   })
   .catch(err => {
     next(err);
