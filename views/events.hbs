@@ -1,0 +1,7 @@
+<h1> All the events </h1>
+    {{#each eventList}}
+        <a href="/events/{{_id}}">
+		    <p>{{title}}</p>
+	    </a>
+     {{/each}}
+     <a href="/events/add">Create a new event!</a>
