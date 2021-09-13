@@ -23,20 +23,11 @@ router.get('/events/add', (req, res, next) => {
 
 router.post('/events/add', (req, res, next) => {
   console.log(req.body);
-
   const { title, description, location, startTime, startDate, endTime, endDate } = req.body;
+  
+  // converting form date 
   const start = startDate.split('-').concat(startTime.split(':'))
   const end = endDate.split('-').concat(endTime.split(':'))
-// takes an array with time and date and returns it in utc date format
-// function utcfy (arr) {
-//   const time = arr[0].split(':')
-//   const date = arr[1].split('-')
-//   return date.concat(time)
-// }
-
-
-  console.log(start)
-  console.log(end)
 
   // Date.UTC(year, month, day, hour, minute)
   const utcStarting = new Date(Date.UTC(start[0], start[1], start[2], start[3], start[4]));
@@ -54,17 +45,28 @@ router.post('/events/add', (req, res, next) => {
   })
   .then(createdEvent => {
     console.log(createdEvent);
-    // res.redirect(`/events/${createdEvent._id}`);
-    res.redirect(`/events`);
+    res.redirect(`/events/${createdEvent._id}`);
+    //res.redirect(`/events`);
   })
   .catch(err => next(err));
 });
 
-// takes an array with time and date and returns it in utc date format
-function utcfy (arr) {
-  const time = arr[0].split(':')
-  const date = arr[1].split('-')
-  return date.concat(time)
-}
+
+router.get('/events/:id', (req, res, next) => {
+	
+	console.log(req.params);
+	const eventId = req.params.id;
+	
+	Event.findById(eventId).populate('creator')
+	.then(eventFromDB => {
+		console.log(eventFromDB);
+		
+		res.render('eventDetails', { event: eventFromDB });
+		
+	})
+	.catch(err => {
+		next(err);
+	})
+});
 
 module.exports = router;
