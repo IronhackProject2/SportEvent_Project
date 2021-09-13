@@ -2,6 +2,7 @@ const router = require("express").Router();
 const { startSession } = require("../models/Event");
 const Event = require('../models/Event');
 const User = require('../models/User.model');
+const { loginCheck } = require('./middlewares');
 
 //my new comments
 
@@ -21,8 +22,8 @@ router.get('/events/add', (req, res, next) => {
   res.render('event/eventForm');
 });
 
-router.post('/events/add', (req, res, next) => {
-  console.log(req.body);
+router.post('/events/add', loginCheck(), (req, res, next) => {
+  const creator = req.user._id;
   const { title, description, location, startTime, startDate, endTime, endDate } = req.body;
   
   // converting form date 
@@ -42,8 +43,8 @@ router.post('/events/add', (req, res, next) => {
     timeAndDate: {
       starting: utcStarting,
       ending: utcEnding
-    }
-    // creator: this will have to come from the cookie?
+    },
+    creator: creator
   })
   .then(createdEvent => {
     console.log(createdEvent);
@@ -53,22 +54,32 @@ router.post('/events/add', (req, res, next) => {
   .catch(err => next(err));
 });
 
-router.get('/events/edit/:id', (req, res, next) => {
+router.get('/events/edit/:id', loginCheck(), (req, res, next) => {
+  const loggedInUser = req.user
   const eventId = req.params.id
   
   Event.findById(eventId)
   .then(eventFromDB => {
-    console.log(eventFromDB);
     // here the problem ////
     const startTime = eventFromDB.timeAndDate.starting.toISOString().split("T")[1].split(".")[0]; 
     const endTime = eventFromDB.timeAndDate.ending.toISOString().split("T")[1].split(".")[0];
+    
     const startDate = eventFromDB.timeAndDate.starting.toISOString().split("T")[0]; 
     const endDate = eventFromDB.timeAndDate.ending.toISOString().split("T")[0];
     console.log("start time: ----------- ", startTime)
     console.log("start date: ----------- ", startDate)
     console.log("end time: ----------- ", endTime)
     console.log("end date: ----------- ", endDate)
-    res.render('event/eventEdit', { event: eventFromDB, startTime: startTime, startDate: startDate, endTime: endTime });
+    
+    //// console.log(typeof loggedInUser._id);
+    //// console.log(typeof eventFromDB.creator);
+    //// console.log(loggedInUser._id.toString() === eventFromDB.creator.toString());
+    if (loggedInUser._id.toString() === eventFromDB.creator.toString() || loggedInUser.role === 'admin') {
+       res.render('event/eventEdit', { event: eventFromDB, startTime: startTime, startDate: startDate, endTime: endTime });
+    } else {
+      res.redirect(`/events/${eventId}`)
+    }
+
   })
   .catch(err => {
     next(err);
@@ -107,10 +118,15 @@ router.post('/events/edit/:id', (req, res, next) => {
 	})
 });
 
-router.get('/events/delete/:id', (req, res, next) => {
-	console.log('deleting this event');
+router.get('/events/delete/:id', loginCheck(), (req, res, next) => {
+	
 	const eventId = req.params.id;
-	Event.findByIdAndDelete(eventId)
+  const query = { _id: eventId }
+
+  if (req.user.role !== 'admin') {
+      query.creator = req.user._id.toString();
+  } 
+	Event.findByIdAndDelete(query)
 	.then(() => {
 		// redirect to events list
 		res.redirect('/events')
@@ -121,7 +137,6 @@ router.get('/events/delete/:id', (req, res, next) => {
 });
 
 router.get('/events/:id', (req, res, next) => { 
-  console.log(req.params);
   const eventId = req.params.id;
   Event.findById(eventId).populate('creator')
   .then(eventFromDB => {
