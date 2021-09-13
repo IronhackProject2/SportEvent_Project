@@ -10,7 +10,7 @@ router.get('/events', (req, res, next) => {
   Event.find()
   .then(eventsFromDB => {
     console.log('-------- all events: ', eventsFromDB);
-    res.render('events', { eventList: eventsFromDB });
+    res.render('event/events', { eventList: eventsFromDB });
   })
   .catch(err => {
     next(err);
@@ -18,7 +18,7 @@ router.get('/events', (req, res, next) => {
 });
 
 router.get('/events/add', (req, res, next) => {
-  res.render('eventForm');
+  res.render('event/eventForm');
 });
 
 router.post('/events/add', (req, res, next) => {
@@ -62,7 +62,7 @@ router.get('/events/edit/:id', (req, res, next) => {
     const endTime = eventFromDB.timeAndDate.ending.toISOString().split("T")[1].split(".")[0];
     console.log("start time: ----------- ", startTime)
     console.log("end time: ----------- ", endTime)
-    res.render('eventEdit', { event: eventFromDB, startTime: startTime, endTime: endTime });
+    res.render('event/eventEdit', { event: eventFromDB, startTime: startTime, endTime: endTime });
   })
   .catch(err => {
     next(err);
@@ -120,7 +120,7 @@ router.get('/events/:id', (req, res, next) => {
   Event.findById(eventId).populate('creator')
   .then(eventFromDB => {
     console.log(eventFromDB);
-    res.render('eventDetails', { event: eventFromDB });
+    res.render('event/eventDetails', { event: eventFromDB });
   })
   .catch(err => {
     next(err);
