@@ -8,7 +8,13 @@ const userSchema = new Schema({
   },
   password: String,
   githubId: String,
-  avatar: String
+  avatar: String,
+  role: {
+    type: String,
+    // only 'admin' and 'user' are allowed values for the role field
+    enum: ['user', 'admin'],
+    default: 'user'
+  }
 });
 
 const User = model("User", userSchema);
