@@ -37,6 +37,46 @@ app.use(
 )
 // end of session configuration
 
+// passport config
+
+const User = require('./models/User.model');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const bcrypt = require('bcrypt');
+
+passport.serializeUser((user, done) => {
+	done(null, user._id);
+});
+
+passport.deserializeUser((id, done) => {
+	User.findById(id)
+		.then(userFromDB => {
+			done(null, userFromDB);
+		})
+		.catch(err => {
+			done(err);
+		})
+})
+
+// register the local strategy (login with username and password)
+passport.use(
+	new LocalStrategy((username, password, done) => {
+		User.findOne({ username: username })
+			.then(userFromDB => {
+				if (userFromDB === null) {
+					done(null, false, { message: 'Wrong Credentials' });
+				} 
+                if (!bcrypt.compareSync(password, userFromDB.password)) { return done(null, false, { message: 'Wrong Credentials'}); }
+                return done(null, userFromDB);
+			})
+	})
+)
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+// end of passport config
+
 // default value for title local
 const projectName = "sport-events";
 const capitalized = (string) => string[0].toUpperCase() + string.slice(1).toLowerCase();

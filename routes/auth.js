@@ -1,6 +1,8 @@
 const router = require("express").Router();
+const User = require('../models/User.model');
+const bcrypt = require('bcrypt');
+const passport = require('passport')
 
-/* GET home page */
 router.get("/signup", (req, res, next) => {
   res.render("user/signup");
 });
@@ -9,22 +11,10 @@ router.get("/login", (req, res, next) => {
     res.render("user/login");
   });
 
-  router.post('/login', (req, res, next) => {
-	const { username, password } = req.body;
-	User.findOne({ username: username })
-		.then(userFromDB => {
-			if (userFromDB === null) {
-				res.render('login', { message: 'incorrect credentials' })
-			}
-			if (bcrypt.compareSync(password, userFromDB.password)) {
-				req.session.user = userFromDB;
-				res.redirect('/profile');
-			} else {
-				res.render('login', { message: 'incorrect credentials' })
-			}
-		})
-});
-
+router.post('/login', passport.authenticate('local', {
+    successRedirect: '/profile',
+    failureRedirect: '/login'
+  }));
 
 router.post('/signup', (req, res, next) => {
 	console.log(req.body);
@@ -46,8 +36,7 @@ router.post('/signup', (req, res, next) => {
 				const hash = bcrypt.hashSync(password, salt);
 				User.create({ username: username, password: hash })
 					.then(createdUser => {
-						console.log(createdUser);
-						res.redirect('/');
+						res.redirect('/login');
 					})
 					.catch(err => {
 						next(err);
