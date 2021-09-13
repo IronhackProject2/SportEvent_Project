@@ -3,13 +3,14 @@ const { startSession } = require("../models/Event");
 const Event = require('../models/Event');
 const User = require('../models/User.model');
 
+//my new comments
 
 router.get('/events', (req, res, next) => {
   // get all events from the database
   Event.find()
   .then(eventsFromDB => {
     console.log('-------- all events: ', eventsFromDB);
-    res.render('events', { eventList: eventsFromDB });
+    res.render('event/events', { eventList: eventsFromDB });
   })
   .catch(err => {
     next(err);
@@ -17,7 +18,7 @@ router.get('/events', (req, res, next) => {
 });
 
 router.get('/events/add', (req, res, next) => {
-  res.render('eventForm');
+  res.render('event/eventForm');
 });
 
 router.post('/events/add', (req, res, next) => {
@@ -27,11 +28,13 @@ router.post('/events/add', (req, res, next) => {
   // converting form date 
   const start = startDate.split('-').concat(startTime.split(':'))
   const end = endDate.split('-').concat(endTime.split(':'))
-  
+  console.log("------------- start:", start)
+  console.log("------------- end:", end)
   // Date.UTC(year, month, day, hour, minute)
-  const utcStarting = new Date(Date.UTC(start[0], start[1], start[2], start[3], start[4]));
-  const utcEnding = new Date(Date.UTC(end[0], end[1], end[2], end[3], end[4]));
-  
+  const utcStarting = new Date(start[0], start[1], start[2], start[3], start[4]);
+  const utcEnding = new Date(end[0], end[1], end[2], end[3], end[4]);
+  console.log("------------- utcStarting:", utcStarting)
+  console.log("------------- utcEnding:", utcEnding)
   Event.create({
     title: title,
     description: description,
@@ -59,9 +62,13 @@ router.get('/events/edit/:id', (req, res, next) => {
     // here the problem ////
     const startTime = eventFromDB.timeAndDate.starting.toISOString().split("T")[1].split(".")[0]; 
     const endTime = eventFromDB.timeAndDate.ending.toISOString().split("T")[1].split(".")[0];
+    const startDate = eventFromDB.timeAndDate.starting.toISOString().split("T")[0]; 
+    const endDate = eventFromDB.timeAndDate.ending.toISOString().split("T")[0];
     console.log("start time: ----------- ", startTime)
+    console.log("start date: ----------- ", startDate)
     console.log("end time: ----------- ", endTime)
-    res.render('eventEdit', { event: eventFromDB, startTime: startTime, endTime: endTime });
+    console.log("end date: ----------- ", endDate)
+    res.render('event/eventEdit', { event: eventFromDB, startTime: startTime, startDate: startDate, endTime: endTime });
   })
   .catch(err => {
     next(err);
@@ -78,8 +85,8 @@ router.post('/events/edit/:id', (req, res, next) => {
   const end = endDate.split('-').concat(endTime.split(':'))
   
   // Date.UTC(year, month, day, hour, minute)
-  const utcStarting = new Date(Date.UTC(start[0], start[1], start[2], start[3], start[4]));
-  const utcEnding = new Date(Date.UTC(end[0], end[1], end[2], end[3], end[4]));
+  const utcStarting = new Date(start[0], start[1], start[2], start[3], start[4]);
+  const utcEnding = new Date(end[0], end[1], end[2], end[3], end[4]);
 	
 	// if findByIdAndUpdate() should return the updated event -> add {new: true}
 	Event.findByIdAndUpdate(eventId, {
@@ -119,7 +126,7 @@ router.get('/events/:id', (req, res, next) => {
   Event.findById(eventId).populate('creator')
   .then(eventFromDB => {
     console.log(eventFromDB);
-    res.render('eventDetails', { event: eventFromDB });
+    res.render('event/eventDetails', { event: eventFromDB });
   })
   .catch(err => {
     next(err);
