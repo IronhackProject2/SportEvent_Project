@@ -63,7 +63,6 @@ router.get('/events/edit/:id', loginCheck(), (req, res, next) => {
     // here the problem ////
     const startTime = eventFromDB.timeAndDate.starting.toISOString().split("T")[1].split(".")[0]; 
     const endTime = eventFromDB.timeAndDate.ending.toISOString().split("T")[1].split(".")[0];
-    
     const startDate = eventFromDB.timeAndDate.starting.toISOString().split("T")[0]; 
     const endDate = eventFromDB.timeAndDate.ending.toISOString().split("T")[0];
     console.log("start time: ----------- ", startTime)
@@ -86,8 +85,9 @@ router.get('/events/edit/:id', loginCheck(), (req, res, next) => {
   })
 });
 
-router.post('/events/edit/:id', (req, res, next) => {
-	const eventId = req.params.id;
+router.post('/events/edit/:id', loginCheck(), (req, res, next) => {
+  const loggedInUser = req.user
+  const eventId = req.params.id;
 
 	const { title, description, location, startTime, startDate, endTime, endDate } = req.body;
   
@@ -100,22 +100,30 @@ router.post('/events/edit/:id', (req, res, next) => {
   const utcEnding = new Date(end[0], end[1], end[2], end[3], end[4]);
 	
 	// if findByIdAndUpdate() should return the updated event -> add {new: true}
-	Event.findByIdAndUpdate(eventId, {
-		title: title,
-		description: description,
-    location: location,
-    timeAndDate: {
-      starting: utcStarting,
-      ending: utcEnding
+  Event.findById(eventId)
+  .then(eventFromDB => {
+    if (loggedInUser._id.toString() === eventFromDB.creator.toString() || loggedInUser.role === 'admin') {
+      Event.findByIdAndUpdate(eventId, {
+        title: title,
+        description: description,
+        location: location,
+        timeAndDate: {
+          starting: utcStarting,
+          ending: utcEnding
+        }
+      }, { new: true })
+      .then(updatedEvent => {
+        console.log(updatedEvent);
+        res.redirect(`/events/${updatedEvent._id}`);
+      })
+      .catch(err => {
+        next(err);
+      })
     }
-	}, { new: true })
-	.then(updatedEvent => {
-		console.log(updatedEvent);
-		res.redirect(`/events/${updatedEvent._id}`);
-	})
-	.catch(err => {
-		next(err);
-	})
+  })
+  .catch(err => {
+    next(err);
+  })
 });
 
 router.get('/events/delete/:id', loginCheck(), (req, res, next) => {
