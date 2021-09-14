@@ -3,6 +3,20 @@ const { startSession } = require("../models/Event");
 const Event = require('../models/Event');
 const User = require('../models/User.model');
 const { loginCheck } = require('./middlewares');
+const axios = require('axios');
+
+// function to get url from address
+const getMapUrl = addressFromDB =>{
+  const accessToken = '&access_token=pk.eyJ1IjoiaGFubmVzY2hvIiwiYSI6ImNrdGU1NWt6bzJtYzUyeGxhMmU5MGx3NGEifQ.pR78txw-BbZwg4y32xBJRg'
+  let fullAddress = '';
+  if (addressFromDB.houseNumber) {
+    fullAddress += `${addressFromDB['houseNumber']}%20`
+  }
+  // add contry later (use country code)
+  fullAddress +=`${addressFromDB['street'].replace(/\s/g, '%20')}%20${addressFromDB['city'].replace(/\s/g, '%20')}.json?}`
+  const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${fullAddress}${accessToken}`
+  return url
+}
 
 //my new comments
 
@@ -24,7 +38,9 @@ router.get('/events/add', (req, res, next) => {
 
 router.post('/events/add', loginCheck(), (req, res, next) => {
   const creator = req.user._id;
-  const { title, description, location, startTime, startDate, endTime, endDate } = req.body;
+  console.log(req.body);
+  const { title, description, location, startTime, startDate, endTime, endDate, housenumber, street, city, postcode, country} = req.body;
+  
   
   // converting form date 
   const start = startDate.split('-').concat(startTime.split(':'))
@@ -33,26 +49,58 @@ router.post('/events/add', loginCheck(), (req, res, next) => {
   const utcStarting = new Date(start[0], start[1], start[2], start[3], start[4]);
   const utcEnding = new Date(end[0], end[1], end[2], end[3], end[4]);
 
-  Event.create({
-    title: title,
-    description: description,
-    location: location,
-    coordinates: {
-      x: 15.23464113440142,
-      y: 52.74214432831203,
-    },
-    timeAndDate: {
-      starting: utcStarting,
-      ending: utcEnding
-    },
-    creator: creator
-  })
-  .then(createdEvent => {
-    console.log(createdEvent);
-    res.redirect(`/events/${createdEvent._id}`);
-  })
-  .catch(err => next(err));
-});
+  console.log("------------- utcStarting:", utcStarting)
+  console.log("------------- utcEnding:", utcEnding)
+
+  const address = {
+    houseNumber: housenumber,
+    street:street,
+    city:city,
+    postcode:postcode,
+    country:country
+    }
+  const url = getMapUrl(address)
+    // use geocoding api from mapbox
+    axios({
+      method: 'get',
+      url: url
+      })
+      .then(function (response) {
+        // get [longitude, latitude] => for map we might need lat and log
+        const latitude = response.data.features[0].geometry['coordinates'][1];
+        const longitude = response.data.features[0].geometry['coordinates'][0];
+        
+        Event.create({
+          title: title,
+          description: description,
+          location: location,
+          timeAndDate: {
+            starting: utcStarting,
+            ending: utcEnding
+          },
+          coordinates: {
+            latitude:latitude,
+            longitude:longitude
+          },
+          address: {
+            houseNumber: housenumber,
+            street:street,
+            city: city,
+            postcode: postcode,
+            country:country
+          },
+          creator: creator
+        })
+        .then(createdEvent => {
+            console.log(createdEvent);
+            res.redirect(`/events/${createdEvent._id}`);
+        })
+        .catch(err => next(err));
+      });
+        //res.redirect(`/events`);
+      });
+  
+
 
 router.get('/events/edit/:id', loginCheck(), (req, res, next) => {
   const loggedInUser = req.user
@@ -70,7 +118,10 @@ router.get('/events/edit/:id', loginCheck(), (req, res, next) => {
     //// console.log(typeof eventFromDB.creator);
     //// console.log(loggedInUser._id.toString() === eventFromDB.creator.toString());
     if (loggedInUser._id.toString() === eventFromDB.creator.toString() || loggedInUser.role === 'admin') {
-       res.render('event/eventEdit', { event: eventFromDB, startTime: startTime, startDate: startDate, endTime: endTime, endDate: endDate });
+
+       res.render('event/eventEdit', { event: eventFromDB, startTime: startTime, startDate: startDate, endTime: endTime,
+        houseNumber: houseNumber, street:street, city: city, postcode: postcode, country:country });
+
     } else {
       res.redirect(`/events/${eventId}`)
     }
@@ -85,7 +136,7 @@ router.post('/events/edit/:id', loginCheck(), (req, res, next) => {
   const loggedInUser = req.user
   const eventId = req.params.id;
 
-	const { title, description, location, startTime, startDate, endTime, endDate } = req.body;
+	const { title, description, location, startTime, startDate, endTime, endDate, houseNumber, street, city, postcode, country } = req.body;
   
   // converting form date 
   const start = startDate.split('-').concat(startTime.split(':'))
@@ -106,7 +157,15 @@ router.post('/events/edit/:id', loginCheck(), (req, res, next) => {
         timeAndDate: {
           starting: utcStarting,
           ending: utcEnding
-        }
+        },
+        address: {
+          houseNumber: houseNumber,
+          street:street,
+          city: city,
+          postcode: postcode,
+          country:country
+        },
+        creator: creator
       }, { new: true })
       .then(updatedEvent => {
         console.log(updatedEvent);
@@ -145,7 +204,7 @@ router.get('/events/:id', (req, res, next) => {
   Event.findById(eventId).populate('creator')
   .then(eventFromDB => {
     console.log(eventFromDB);
-    res.render('event/eventDetails', { event: eventFromDB });
+      res.render('event/eventDetails', { event: eventFromDB, coordinates: eventFromDB.coordinates});
   })
   .catch(err => {
     next(err);
