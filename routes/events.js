@@ -4,10 +4,13 @@ const Event = require('../models/Event');
 const User = require('../models/User.model');
 const { loginCheck } = require('./middlewares');
 const axios = require('axios');
+require("dotenv/config");
 
 // function to get url from address
 const getMapUrl = addressFromDB =>{
-  const accessToken = '&access_token=pk.eyJ1IjoiaGFubmVzY2hvIiwiYSI6ImNrdGU1NWt6bzJtYzUyeGxhMmU5MGx3NGEifQ.pR78txw-BbZwg4y32xBJRg'
+  
+  const accessToken = process.env.ACCESS_TOKEN
+  console.log(accessToken);
   let fullAddress = '';
   if (addressFromDB.houseNumber) {
     fullAddress += `${addressFromDB['houseNumber']}%20`
@@ -39,7 +42,7 @@ router.get('/events/add', (req, res, next) => {
 router.post('/events/add', loginCheck(), (req, res, next) => {
   const creator = req.user._id;
   console.log(req.body);
-  const { title, description, sports, startTime, startDate, endTime, endDate, housenumber, street, city, postcode, country} = req.body;
+  const { title, description, location, sports, startTime, startDate, endTime, endDate, housenumber, street, city, postcode, country} = req.body;
   
   // converting form date 
   const start = startDate.split('-').concat(startTime.split(':'))
@@ -72,6 +75,7 @@ router.post('/events/add', loginCheck(), (req, res, next) => {
         Event.create({
           title: title,
           description: description,
+          location: location,
           timeAndDate: {
             starting: utcStarting,
             ending: utcEnding
@@ -134,7 +138,7 @@ router.post('/events/edit/:id', loginCheck(), (req, res, next) => {
   const loggedInUser = req.user
   const eventId = req.params.id;
 
-	const { title, description, sports, startTime, startDate, endTime, endDate, housenumber, street, city, postcode, country } = req.body;
+	const { title, description, location, sports, startTime, startDate, endTime, endDate, housenumber, street, city, postcode, country } = req.body;
   const address = {
     houseNumber: housenumber,
     street:street,
@@ -169,6 +173,7 @@ router.post('/events/edit/:id', loginCheck(), (req, res, next) => {
             Event.findByIdAndUpdate(eventId, {
               title: title,
               description: description,
+              location: location,
               timeAndDate: {
                 starting: utcStarting,
                 ending: utcEnding
