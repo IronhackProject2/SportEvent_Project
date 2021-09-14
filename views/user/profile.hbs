@@ -1,3 +1,10 @@
-<h1>This is the profile page 🤩</h1>
+
 <h1>Hello {{user.username}} 👋</h1>
+    {{#each eventList}}
+        <a href="/events/{{_id}}">
+		    <p>{{title}}</p>
+	    </a>
+     {{/each}}
+<h3><a href="/events/add">Create a new event!</a></h3>
+<h3> <a href="/events">View all events </a></h3>
 <a href="/logout">Log out 🚪</a>
