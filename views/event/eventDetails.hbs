@@ -1,18 +1,22 @@
 {{#with event}}
 	<h1> Information about {{ title }} </h1>
+	<h2> Event created by: {{ creator.username }}</h2>
 	<h3>Details:</h3>
 	<p>{{ description }}</p>
 
 	<p> From: {{ timeAndDate.starting }}</p>
 	<p> To: {{ timeAndDate.ending }}</p>
+
 	<p>Location: {{ address }}</p>
 	<p>Sports: {{ sports }}</p>
 	<a href="/events/edit/{{_id}}">Edit this event </a>
-   
-	{{!-- these are used by mapbox.js to center the map --}}
-	<div id='hiddenY' style='display: none'>{{ coordinates.latitude }}</div>
-	<div id='hiddenX' style='display: none'>{{ coordinates.longitude }}</div>
 
+	{{!-- these are used by mapbox.js to center the map --}}
+	<div id='hiddenLat' style='display: none'>{{ coordinates.latitude }}</div>
+	<div id='hiddenLon' style='display: none'>{{ coordinates.longitude }}</div>
+{{/with}}
+{{{editLink}}}
+
+	<h3> <a href="/events">Back to all events </a></h3>
 	<div id='map' style='width: 400px; height: 300px;'></div>
 	<script src="/js/mapbox.js"></script>
-{{/with}}
