@@ -9,5 +9,6 @@
 	<p>Location: {{ location }}</p>
 
 	<a href="/events/edit/{{_id}}">Edit this event </a>
-    {{!-- <a href="/events/delete/{{_id}}">Delete this event </a>  --}}
+    <div id='map' style='width: 400px; height: 300px;'></div>
+	<script src="/js/mapbox.js"></script>
 {{/with}}
