@@ -9,7 +9,7 @@ router.get("/", (req, res, next) => {
 
 router.get('/profile', loginCheck(), (req, res, next) => {
   const loggedInUser = req.user;
-  Event.find({creator: loggedInUser._id})  //
+  Event.find({creator: loggedInUser._id}).sort({'timeAndDate.starting': -1})
   .then(eventsFromDB => {
     console.log('-------- all the users events: ', eventsFromDB);
     res.render('user/profile', { user: loggedInUser, eventList: eventsFromDB });
@@ -18,5 +18,6 @@ router.get('/profile', loginCheck(), (req, res, next) => {
     next(err);
   })
 })
+
 
 module.exports = router;

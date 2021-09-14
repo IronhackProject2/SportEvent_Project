@@ -22,7 +22,7 @@ const getMapUrl = addressFromDB =>{
 
 router.get('/events', (req, res, next) => {
   // get all events from the database
-  Event.find().sort({'timeAndDate.starting': 1})
+  Event.find().sort({'timeAndDate.starting': -1})
   .then(eventsFromDB => {
     console.log('-------- all events: ', eventsFromDB);
     res.render('event/events', { eventList: eventsFromDB });
