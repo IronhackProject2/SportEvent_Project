@@ -8,7 +8,7 @@ const { loginCheck } = require('./middlewares');
 
 router.get('/events', (req, res, next) => {
   // get all events from the database
-  Event.find()
+  Event.find().sort({'timeAndDate.starting': 1})
   .then(eventsFromDB => {
     console.log('-------- all events: ', eventsFromDB);
     res.render('event/events', { eventList: eventsFromDB });

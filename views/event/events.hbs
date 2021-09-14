@@ -1,7 +1,8 @@
 <h1> All the events </h1>
     {{#each eventList}}
-        <a href="/events/{{_id}}">
+        <h3><a href="/events/{{_id}}">
 		    <p>{{title}}</p>
-	    </a>
+	    </a></h3>
+         <small>{{timeAndDate.starting}}</small>
      {{/each}}
-     <a href="/events/add">Create a new event!</a>
+     <h2><a href="/events/add">Create a new event!</a></h2>
