@@ -10,7 +10,12 @@ const eventSchema = new Schema({
         // so this is the part connecting to the authors collection
         ref: 'User'
     },
+    coordinates: {
+        latitude: Number,
+        longitude: Number,
+    },
     address: {
+        houseNumber: Number,
         street: String,
         city: String,
         postcode:Number,
