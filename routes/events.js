@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const { startSession } = require("../models/Event");
 const Event = require('../models/Event');
-const User = require('../models/User.model');
+// const User = require('../models/User.model');
 const { loginCheck } = require('./middlewares');
 const axios = require('axios');
 
