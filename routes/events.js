@@ -25,7 +25,14 @@ router.get('/events', (req, res, next) => {
   Event.find().sort({'timeAndDate.starting': -1})
   .then(eventsFromDB => {
     console.log('-------- all events: ', eventsFromDB);
-    res.render('event/events', { eventList: eventsFromDB });
+    let positions = [];
+    for (let event of eventsFromDB){
+      positions.push( [event.coordinates.longitude, event.coordinates.latitude] );
+    };
+    
+    console.log('VVVVVVVVVVVVVVVVVxxVVVVVVVVVVVVVVVVV')
+    console.log(positions)
+    res.render('event/events', { eventList: eventsFromDB, positions: positions });
   })
   .catch(err => {
     next(err);
@@ -162,8 +169,6 @@ router.post('/events/edit/:id', loginCheck(), (req, res, next) => {
     url: url
   })
   .then(function (response) {
-    console.log('VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV')
-    console.log(response.data)
     // get [longitude, latitude] => for map we might need lat and log
     const latitude = response.data.features[0].geometry['coordinates'][1];
     const longitude = response.data.features[0].geometry['coordinates'][0];

@@ -1,5 +1,8 @@
 mapboxgl.accessToken = 'pk.eyJ1IjoicHJvZC1hc3RyaSIsImEiOiJja3RlNTkydDYwNG03MnBxbnJvZmd0aWhnIn0.eSYEto_HPz1pJlwzhhboig';
 const center = [document.querySelector('#hiddenLon').innerHTML, document.querySelector('#hiddenLat').innerHTML]; //[13.4532321, 52.5331092]
+
+const coords = document.querySelector('#hiddenPositions').innerHTML;
+
 const map = new mapboxgl.Map({
 	
 	container: 'map', // container ID
@@ -21,19 +24,14 @@ const popup = new mapboxgl.Popup({
 	closeButton: true
 });
 
-// const coords = [
-//     [13.001, 52],
-//     [12.999, 52]
-// ]
 
-
-// coords.forEach(function (coord) {
-// 	new mapboxgl.Marker({
-//         color: 'blue',
-//         draggable: true
-// 	}).setLngLat(coord)
-//     .addTo(map)
-// })
+coords.forEach(function (coord) {
+	new mapboxgl.Marker({
+        color: 'blue',
+        draggable: true
+	}).setLngLat(coord)
+    .addTo(map)
+})
 
 // const addMarker = event => {
 // 	new mapboxgl.Marker({
