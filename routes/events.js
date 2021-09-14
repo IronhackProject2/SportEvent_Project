@@ -6,7 +6,7 @@ const { loginCheck } = require('./middlewares');
 const axios = require('axios');
 
 // function to get url from address
-const getAddress = addressFromDB =>{
+const getMapUrl = addressFromDB =>{
   const accessToken = '&access_token=pk.eyJ1IjoiaGFubmVzY2hvIiwiYSI6ImNrdGU1NWt6bzJtYzUyeGxhMmU5MGx3NGEifQ.pR78txw-BbZwg4y32xBJRg'
   let fullAddress = '';
   if (addressFromDB.houseNumber) {
@@ -60,7 +60,7 @@ router.post('/events/add', loginCheck(), (req, res, next) => {
     postcode:postcode,
     country:country
     }
-  const url = getAddress(address)
+  const url = getMapUrl(address)
     // use geocoding api from mapbox
     axios({
       method: 'get',
