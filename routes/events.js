@@ -47,58 +47,61 @@ router.post('/events/add', loginCheck(), (req, res, next) => {
   // Date.UTC(year, month, day, hour, minute)
   const utcStarting = new Date(start[0], start[1], start[2], start[3], start[4]);
   const utcEnding = new Date(end[0], end[1], end[2], end[3], end[4]);
-
+  
   console.log("------------- utcStarting:", utcStarting)
   console.log("------------- utcEnding:", utcEnding)
-
+  
   const address = {
     houseNumber: housenumber,
     street:street,
     city:city,
     postcode:postcode,
     country:country
-    }
+  }
   const url = getMapUrl(address)
-    // use geocoding api from mapbox
-    axios({
-      method: 'get',
-      url: url
-      })
-      .then(function (response) {
-        // get [longitude, latitude] => for map we might need lat and log
-        const latitude = response.data.features[0].geometry['coordinates'][1];
-        const longitude = response.data.features[0].geometry['coordinates'][0];
-        
-        Event.create({
-          title: title,
-          description: description,
-          timeAndDate: {
-            starting: utcStarting,
-            ending: utcEnding
-          },
-          coordinates: {
-            latitude:latitude,
-            longitude:longitude
-          },
-          address: {
-            houseNumber: housenumber,
-            street:street,
-            city: city,
-            postcode: postcode,
-            country:country
-          },
-          creator: creator,
-          sports: sports
-        })
-        .then(createdEvent => {
-            console.log(createdEvent);
-            res.redirect(`/events/${createdEvent._id}`);
-        })
-        .catch(err => next(err));
-      });
-        //res.redirect(`/events`);
-      });
-  
+  // use geocoding api from mapbox
+  axios({
+    method: 'get',
+    url: url
+  })
+  .then(function (response) {
+    // get [longitude, latitude] => for map we might need lat and log
+    const latitude = response.data.features[0].geometry['coordinates'][1];
+    const longitude = response.data.features[0].geometry['coordinates'][0];
+    
+    Event.create({
+      title: title,
+      description: description,
+      timeAndDate: {
+        starting: utcStarting,
+        ending: utcEnding
+      },
+      coordinates: {
+        latitude:latitude,
+        longitude:longitude
+      },
+      address: {
+        houseNumber: housenumber,
+        street:street,
+        city: city,
+        postcode: postcode,
+        country:country
+      },
+      creator: creator,
+      sports: sports
+    })
+    .then(createdEvent => {
+      console.log(createdEvent);
+      res.redirect(`/events/${createdEvent._id}`);
+    })
+    .catch(err => next(err));
+  })
+  .catch((err) => {
+    res.redirect(`/events`)
+    next(err);
+  }) 
+});
+
 
 
 router.get('/events/edit/:id', loginCheck(), (req, res, next) => {
@@ -117,13 +120,13 @@ router.get('/events/edit/:id', loginCheck(), (req, res, next) => {
     //// console.log(typeof eventFromDB.creator);
     //// console.log(loggedInUser._id.toString() === eventFromDB.creator.toString());
     if (loggedInUser._id.toString() === eventFromDB.creator.toString() || loggedInUser.role === 'admin') {
-
-       res.render('event/eventEdit', { event: eventFromDB, startTime: startTime, startDate: startDate, endDate: endDate, endTime: endTime });
-
+      
+      res.render('event/eventEdit', { event: eventFromDB, startTime: startTime, startDate: startDate, endDate: endDate, endTime: endTime });
+      
     } else {
       res.redirect(`/events/${eventId}`)
     }
-
+    
   })
   .catch(err => {
     next(err);
@@ -133,15 +136,15 @@ router.get('/events/edit/:id', loginCheck(), (req, res, next) => {
 router.post('/events/edit/:id', loginCheck(), (req, res, next) => {
   const loggedInUser = req.user
   const eventId = req.params.id;
-
-	const { title, description, sports, startTime, startDate, endTime, endDate, housenumber, street, city, postcode, country } = req.body;
+  
+  const { title, description, sports, startTime, startDate, endTime, endDate, housenumber, street, city, postcode, country } = req.body;
   const address = {
     houseNumber: housenumber,
     street:street,
     city:city,
     postcode:postcode,
     country:country
-    }
+  }
   
   // converting form date 
   const start = startDate.split('-').concat(startTime.split(':'))
@@ -150,73 +153,78 @@ router.post('/events/edit/:id', loginCheck(), (req, res, next) => {
   // Date.UTC(year, month, day, hour, minute)
   const utcStarting = new Date(start[0], start[1], start[2], start[3], start[4]);
   const utcEnding = new Date(end[0], end[1], end[2], end[3], end[4]);
-	
-	// if findByIdAndUpdate() should return the updated event -> add {new: true}
+  
+  // if findByIdAndUpdate() should return the updated event -> add {new: true}
   const url = getMapUrl(address)
-    // use geocoding api from mapbox
-    axios({
-      method: 'get',
-      url: url
-      })
-      .then(function (response) {
-        // get [longitude, latitude] => for map we might need lat and log
-        const latitude = response.data.features[0].geometry['coordinates'][1];
-        const longitude = response.data.features[0].geometry['coordinates'][0];
-
-        Event.findById(eventId)
-        .then(eventFromDB => {
-          if (loggedInUser._id.toString() === eventFromDB.creator.toString() || loggedInUser.role === 'admin') {
-            Event.findByIdAndUpdate(eventId, {
-              title: title,
-              description: description,
-              timeAndDate: {
-                starting: utcStarting,
-                ending: utcEnding
-              },
-              coordinates: {
-                latitude:latitude,
-                longitude:longitude
-              },
-              address: {
-                houseNumber: housenumber,
-                street:street,
-                city: city,
-                postcode: postcode,
-                country:country
-              },
-              sports:sports
-            }, { new: true })
-            .then(updatedEvent => {
-              console.log(updatedEvent);
-              res.redirect(`/events/${updatedEvent._id}`);
-            })
-            .catch(err => {
-              next(err);
-            })
-          }
+  // use geocoding api from mapbox
+  axios({
+    method: 'get',
+    url: url
+  })
+  .then(function (response) {
+    console.log('VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV')
+    console.log(response.data)
+    // get [longitude, latitude] => for map we might need lat and log
+    const latitude = response.data.features[0].geometry['coordinates'][1];
+    const longitude = response.data.features[0].geometry['coordinates'][0];
+    
+    Event.findById(eventId)
+    .then(eventFromDB => {
+      if (loggedInUser._id.toString() === eventFromDB.creator.toString() || loggedInUser.role === 'admin') {
+        Event.findByIdAndUpdate(eventId, {
+          title: title,
+          description: description,
+          timeAndDate: {
+            starting: utcStarting,
+            ending: utcEnding
+          },
+          coordinates: {
+            latitude:latitude,
+            longitude:longitude
+          },
+          address: {
+            houseNumber: housenumber,
+            street:street,
+            city: city,
+            postcode: postcode,
+            country:country
+          },
+          sports:sports
+        }, { new: true })
+        .then(updatedEvent => {
+          console.log(updatedEvent);
+          res.redirect(`/events/${updatedEvent._id}`);
         })
         .catch(err => {
           next(err);
         })
-      })
+      }
+    })
+    .catch(err => {
+      next(err);
+    })
+  })
+  .catch(err => {
+    next(err);
+  })
 });
 
 router.get('/events/delete/:id', loginCheck(), (req, res, next) => {
-	
-	const eventId = req.params.id;
+  
+  const eventId = req.params.id;
   const query = { _id: eventId }
-
+  
   if (req.user.role !== 'admin') {
-      query.creator = req.user._id.toString();
+    query.creator = req.user._id.toString();
   } 
-	Event.findByIdAndDelete(query)
-	.then(() => {
-		// redirect to events list
-		res.redirect('/events')
-	})
-	.catch(err => {
-		next(err);
-	})
+  Event.findByIdAndDelete(query)
+  .then(() => {
+    // redirect to events list
+    res.redirect('/events')
+  })
+  .catch(err => {
+    next(err);
+  })
 });
 
 router.get('/events/:id', (req, res, next) => { 
@@ -228,12 +236,12 @@ router.get('/events/:id', (req, res, next) => {
   Event.findById(eventId).populate('creator')
   .then(eventFromDB => {
     console.log(eventFromDB);
-
+    
     if (eventFromDB.creator._id.toString() === userId.toString()){
-      editLink = `<a href="/events/edit/{{_id}}">Edit this event </a>`
+      editLink = `<a href="/events/edit/${eventId}">Edit this event </a>`
     }
     console.log('------',eventFromDB.creator._id, '------' , userId)
-      res.render('event/eventDetails', { event: eventFromDB, editLink: editLink});
+    res.render('event/eventDetails', { event: eventFromDB, editLink: editLink});
   })
   .catch(err => {
     next(err);
