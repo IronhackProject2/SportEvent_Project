@@ -3,12 +3,17 @@
 	<h3>Details:</h3>
 	
 	<p>{{ description }}</p>
-	<p> From: {{ timeAndDate.starting}}</p>
-	<p> To: {{ timeAndDate.ending}}</p>
+	<p> From: {{ timeAndDate.starting }}</p>
+	<p> To: {{ timeAndDate.ending }}</p>
 	
 	<p>Location: {{ location }}</p>
 
 	<a href="/events/edit/{{_id}}">Edit this event </a>
-    <div id='map' style='width: 400px; height: 300px;'></div>
+    {{!-- <a href="/events/delete/{{_id}}">Delete this event </a>  --}}
+	{{!-- hidden div year --}}
+	<div id='hiddenX'>{{ coordinates.x }}</div>
+	<div id='hiddenY'>{{ coordinates.y }}</div>
+
+	<div id='map' style='width: 400px; height: 300px;'></div>
 	<script src="/js/mapbox.js"></script>
 {{/with}}

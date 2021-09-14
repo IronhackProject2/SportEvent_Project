@@ -38,8 +38,8 @@ router.post('/events/add', loginCheck(), (req, res, next) => {
     description: description,
     location: location,
     coordinates: {
-      x: 10.4,
-      y: 44.6666,
+      x: 15.23464113440142,
+      y: 52.74214432831203,
     },
     timeAndDate: {
       starting: utcStarting,

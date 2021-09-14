@@ -1,5 +1,8 @@
 mapboxgl.accessToken = 'pk.eyJ1IjoicHJvZC1hc3RyaSIsImEiOiJja3RlNTkydDYwNG03MnBxbnJvZmd0aWhnIn0.eSYEto_HPz1pJlwzhhboig';
-const center = [13, 52]; //[13.4532321, 52.5331092]
+const center = [document.querySelector('#hiddenX').innerHTML, document.querySelector('#hiddenY').innerHTML]; //[13.4532321, 52.5331092]
+console.log('---------------------------------')
+console.log (center)
+console.log('---------------------------------')
 const map = new mapboxgl.Map({
     //          V this is basically the id
 	container: 'map', // container ID
@@ -15,10 +18,10 @@ const popup = new mapboxgl.Popup({
 	closeButton: true
 });
 
-const coords = [
-    [13.001, 52],
-    [12.999, 52]
-]
+// const coords = [
+//     [13.001, 52],
+//     [12.999, 52]
+// ]
 
 
 // coords.forEach(function (coord) {
