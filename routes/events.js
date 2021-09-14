@@ -29,17 +29,18 @@ router.post('/events/add', loginCheck(), (req, res, next) => {
   // converting form date 
   const start = startDate.split('-').concat(startTime.split(':'))
   const end = endDate.split('-').concat(endTime.split(':'))
-  console.log("------------- start:", start)
-  console.log("------------- end:", end)
   // Date.UTC(year, month, day, hour, minute)
   const utcStarting = new Date(start[0], start[1], start[2], start[3], start[4]);
   const utcEnding = new Date(end[0], end[1], end[2], end[3], end[4]);
-  console.log("------------- utcStarting:", utcStarting)
-  console.log("------------- utcEnding:", utcEnding)
+
   Event.create({
     title: title,
     description: description,
     location: location,
+    coordinates: {
+      x: 15.23464113440142,
+      y: 52.74214432831203,
+    },
     timeAndDate: {
       starting: utcStarting,
       ending: utcEnding
@@ -49,7 +50,6 @@ router.post('/events/add', loginCheck(), (req, res, next) => {
   .then(createdEvent => {
     console.log(createdEvent);
     res.redirect(`/events/${createdEvent._id}`);
-    //res.redirect(`/events`);
   })
   .catch(err => next(err));
 });
@@ -65,16 +65,12 @@ router.get('/events/edit/:id', loginCheck(), (req, res, next) => {
     const endTime = eventFromDB.timeAndDate.ending.toISOString().split("T")[1].split(".")[0];
     const startDate = eventFromDB.timeAndDate.starting.toISOString().split("T")[0]; 
     const endDate = eventFromDB.timeAndDate.ending.toISOString().split("T")[0];
-    console.log("start time: ----------- ", startTime)
-    console.log("start date: ----------- ", startDate)
-    console.log("end time: ----------- ", endTime)
-    console.log("end date: ----------- ", endDate)
     
     //// console.log(typeof loggedInUser._id);
     //// console.log(typeof eventFromDB.creator);
     //// console.log(loggedInUser._id.toString() === eventFromDB.creator.toString());
     if (loggedInUser._id.toString() === eventFromDB.creator.toString() || loggedInUser.role === 'admin') {
-       res.render('event/eventEdit', { event: eventFromDB, startTime: startTime, startDate: startDate, endTime: endTime });
+       res.render('event/eventEdit', { event: eventFromDB, startTime: startTime, startDate: startDate, endTime: endTime, endDate: endDate });
     } else {
       res.redirect(`/events/${eventId}`)
     }
