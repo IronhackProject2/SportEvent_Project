@@ -23,7 +23,7 @@ require("./config")(app);
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const DB_URL = process.env.MONGODB_URI; //this in dotenv
-
+console.log(DB_URL);
 app.use(
 	session({
 		secret: process.env.SESSION_SECRET, //this in dotenv could be any string
