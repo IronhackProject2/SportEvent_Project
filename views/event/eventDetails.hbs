@@ -1,11 +1,13 @@
 {{#with event}}
 	<h1> Information about {{ title }} </h1>
+	<h2> Event created by: {{ creator.username }}</h2>
 	<h3>Details:</h3>
 	<p>{{ description }}</p>
 
 	<p> From: {{ timeAndDate.starting }}</p>
 	<p> To: {{ timeAndDate.ending }}</p>
 	<p>Location: {{ location }}</p>
+
 	<a href="/events/edit/{{_id}}">Edit this event </a>
    
 	{{!-- these are used by mapbox.js to center the map --}}

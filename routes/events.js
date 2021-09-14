@@ -204,7 +204,7 @@ router.get('/events/:id', (req, res, next) => {
   Event.findById(eventId).populate('creator')
   .then(eventFromDB => {
     console.log(eventFromDB);
-      res.render('event/eventDetails', { event: eventFromDB, coordinates: eventFromDB.coordinates});
+      res.render('event/eventDetails', { event: eventFromDB});
   })
   .catch(err => {
     next(err);
