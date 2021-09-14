@@ -201,10 +201,18 @@ router.get('/events/delete/:id', loginCheck(), (req, res, next) => {
 
 router.get('/events/:id', (req, res, next) => { 
   const eventId = req.params.id;
+  const userId = req.user._id;
+  let editLink = null;
+  
+  
   Event.findById(eventId).populate('creator')
   .then(eventFromDB => {
     console.log(eventFromDB);
-      res.render('event/eventDetails', { event: eventFromDB});
+    if (eventFromDB.creator._id.toString() === userId.toString()){
+      editLink = `<a href="/events/edit/{{_id}}">Edit this event </a>`
+    }
+    console.log('------',eventFromDB.creator._id, '------' , userId)
+      res.render('event/eventDetails', { event: eventFromDB, editLink: editLink});
   })
   .catch(err => {
     next(err);
