@@ -1,15 +1,18 @@
 mapboxgl.accessToken = 'pk.eyJ1IjoicHJvZC1hc3RyaSIsImEiOiJja3RlNTkydDYwNG03MnBxbnJvZmd0aWhnIn0.eSYEto_HPz1pJlwzhhboig';
 const center = [document.querySelector('#hiddenX').innerHTML, document.querySelector('#hiddenY').innerHTML]; //[13.4532321, 52.5331092]
-console.log('---------------------------------')
-console.log (center)
-console.log('---------------------------------')
 const map = new mapboxgl.Map({
-    //          V this is basically the id
+	
 	container: 'map', // container ID
 	style: 'mapbox://styles/mapbox/streets-v11', // style URL
 	center: center, // starting position [lng, lat]
 	zoom: 9 // starting zoom
 });
+
+const marker = new mapboxgl.Marker({
+	color: 'blue',
+	draggable: false
+}).setLngLat(center)
+.addTo(map)
 
 const nav = new mapboxgl.NavigationControl();
 map.addControl(nav, 'top-left');
