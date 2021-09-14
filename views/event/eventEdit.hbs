@@ -1,25 +1,29 @@
 
 	<h1>Edit this event</h1>
-	<form action="/events/edit/{{event._id}}" method="POST">
+	{{#with event}}
+	<form action="/events/edit/{{_id}}" method="POST">
 		<label for="title">Title: </label>
-		<input type="text" name="title" id="title" value="{{event.title}}">
+		<input type="text" name="title" id="title" value="{{title}}">
 
 		<label for="description">Description: </label>
-		<input type="text" name="description" id="description" value="{{event.description}}">
+		<input type="text" name="description" id="description" value="{{description}}">
 
+		<label for="sports">Sports: </label>
+		<input type="text" name="sports" id="sports" value="{{sports}}">
+	
 		<label for="address">
 			<label for="housenumber">House number: </label>
-			<input type="number" name="housenumber" id="housenumber" value="{{houseNumber}}">
+			<input type="number" name="housenumber" id="housenumber" value="{{address.houseNumber}}">
 			<label for="street">Street: </label>
-			<input type="text" name="street" id="street" value="{{street}}">
+			<input type="text" name="street" id="street" value="{{address.street}}">
 			<label for="city">City: </label>
-			<input type="text" name="city" id="city" value="{{city}}">
+			<input type="text" name="city" id="city" value="{{address.city}}">
 			<label for="postcode">Postcode: </label>
-			<input type="number" name="postcode" id="postcode" value="{{postcode}}">
+			<input type="number" name="postcode" id="postcode" value="{{address.postcode}}">
 			<label for="country">Country: </label>
-			<input type="text" name="country" id="country" value="{{country}}">
+			<input type="text" name="country" id="country" value="{{address.country}}">
 		</label>
-		
+		{{/with}}
 		<label for="startDate">Beginning: </label>
 		<input type="date" name="startDate" id="startDate"value="{{startDate}}" >
 		<input type="time" name="startTime" id="startTime" value="{{startTime}}">

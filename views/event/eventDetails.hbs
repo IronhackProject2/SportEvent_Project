@@ -6,11 +6,11 @@
 
 	<p> From: {{ timeAndDate.starting }}</p>
 	<p> To: {{ timeAndDate.ending }}</p>
-	<p>Location: {{ location }}</p>
 
+	<p>Location: {{ address }}</p>
+	<p>Sports: {{ sports }}</p>
+	<a href="/events/edit/{{_id}}">Edit this event </a>
 
-	
-   
 	{{!-- these are used by mapbox.js to center the map --}}
 	<div id='hiddenLat' style='display: none'>{{ coordinates.latitude }}</div>
 	<div id='hiddenLon' style='display: none'>{{ coordinates.longitude }}</div>
