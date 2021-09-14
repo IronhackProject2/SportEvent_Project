@@ -28,7 +28,8 @@ const eventSchema = new Schema({
     timeAndDate: {
         starting: Date,
         ending: Date,
-    }
+    },
+    sports: String
 });
 
 const Event = mongoose.model('Event', eventSchema);
