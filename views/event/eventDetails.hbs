@@ -9,8 +9,8 @@
 	<a href="/events/edit/{{_id}}">Edit this event </a>
    
 	{{!-- these are used by mapbox.js to center the map --}}
-	<div id='hiddenX' style='display: none'>{{ coordinates.x }}</div>
-	<div id='hiddenY' style='display: none'>{{ coordinates.y }}</div>
+	<div id='hiddenY' style='display: none'>{{ coordinates.latitude }}</div>
+	<div id='hiddenX' style='display: none'>{{ coordinates.longitude }}</div>
 
 	<div id='map' style='width: 400px; height: 300px;'></div>
 	<script src="/js/mapbox.js"></script>
