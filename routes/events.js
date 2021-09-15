@@ -50,18 +50,19 @@ router.post('/events/add', loginCheck(), (req, res, next) => {
   // Date.UTC(year, month, day, hour, minute)
   const utcStarting = new Date(start[0], start[1], start[2], start[3], start[4]);
   const utcEnding = new Date(end[0], end[1], end[2], end[3], end[4]);
-
+  
   console.log("------------- utcStarting:", utcStarting)
   console.log("------------- utcEnding:", utcEnding)
-
+  
   const address = {
     houseNumber: housenumber,
     street:street,
     city:city,
     postcode:postcode,
     country:country
-    }
+  }
   const url = getMapUrl(address)
+
     // use geocoding api from mapbox
     axios({
       method: 'get',
@@ -105,6 +106,7 @@ router.post('/events/add', loginCheck(), (req, res, next) => {
   
 
 
+
 router.get('/events/edit/:id', loginCheck(), (req, res, next) => {
   const loggedInUser = req.user
   const eventId = req.params.id
@@ -121,13 +123,13 @@ router.get('/events/edit/:id', loginCheck(), (req, res, next) => {
     //// console.log(typeof eventFromDB.creator);
     //// console.log(loggedInUser._id.toString() === eventFromDB.creator.toString());
     if (loggedInUser._id.toString() === eventFromDB.creator.toString() || loggedInUser.role === 'admin') {
-
-       res.render('event/eventEdit', { event: eventFromDB, startTime: startTime, startDate: startDate, endDate: endDate, endTime: endTime });
-
+      
+      res.render('event/eventEdit', { event: eventFromDB, startTime: startTime, startDate: startDate, endDate: endDate, endTime: endTime });
+      
     } else {
       res.redirect(`/events/${eventId}`)
     }
-
+    
   })
   .catch(err => {
     next(err);
@@ -138,14 +140,16 @@ router.post('/events/edit/:id', loginCheck(), (req, res, next) => {
   const loggedInUser = req.user
   const eventId = req.params.id;
 
+
 	const { title, description, location, sports, startTime, startDate, endTime, endDate, housenumber, street, city, postcode, country } = req.body;
+
   const address = {
     houseNumber: housenumber,
     street:street,
     city:city,
     postcode:postcode,
     country:country
-    }
+  }
   
   // converting form date 
   const start = startDate.split('-').concat(startTime.split(':'))
@@ -154,9 +158,10 @@ router.post('/events/edit/:id', loginCheck(), (req, res, next) => {
   // Date.UTC(year, month, day, hour, minute)
   const utcStarting = new Date(start[0], start[1], start[2], start[3], start[4]);
   const utcEnding = new Date(end[0], end[1], end[2], end[3], end[4]);
-	
-	// if findByIdAndUpdate() should return the updated event -> add {new: true}
+  
+  // if findByIdAndUpdate() should return the updated event -> add {new: true}
   const url = getMapUrl(address)
+
     // use geocoding api from mapbox
     axios({
       method: 'get',
@@ -199,29 +204,38 @@ router.post('/events/edit/:id', loginCheck(), (req, res, next) => {
               next(err);
             })
           }
+
         })
         .catch(err => {
           next(err);
         })
-      })
+      }
+    })
+    .catch(err => {
+      next(err);
+    })
+  })
+  .catch(err => {
+    next(err);
+  })
 });
 
 router.get('/events/delete/:id', loginCheck(), (req, res, next) => {
-	
-	const eventId = req.params.id;
+  
+  const eventId = req.params.id;
   const query = { _id: eventId }
-
+  
   if (req.user.role !== 'admin') {
-      query.creator = req.user._id.toString();
+    query.creator = req.user._id.toString();
   } 
-	Event.findByIdAndDelete(query)
-	.then(() => {
-		// redirect to events list
-		res.redirect('/events')
-	})
-	.catch(err => {
-		next(err);
-	})
+  Event.findByIdAndDelete(query)
+  .then(() => {
+    // redirect to events list
+    res.redirect('/events')
+  })
+  .catch(err => {
+    next(err);
+  })
 });
 
 router.get('/events/:id', (req, res, next) => { 
@@ -233,12 +247,12 @@ router.get('/events/:id', (req, res, next) => {
   Event.findById(eventId).populate('creator')
   .then(eventFromDB => {
     console.log(eventFromDB);
-
+    
     if (eventFromDB.creator._id.toString() === userId.toString()){
-      editLink = `<a href="/events/edit/{{_id}}">Edit this event </a>`
+      editLink = `<a href="/events/edit/${eventId}">Edit this event </a>`
     }
     console.log('------',eventFromDB.creator._id, '------' , userId)
-      res.render('event/eventDetails', { event: eventFromDB, editLink: editLink});
+    res.render('event/eventDetails', { event: eventFromDB, editLink: editLink});
   })
   .catch(err => {
     next(err);
