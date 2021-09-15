@@ -3,8 +3,15 @@ const { loginCheck } = require('./middlewares');
 const Event = require('../models/Event');
 const User = require('../models/User.model');
 
-router.get("/", (req, res, next) => {
-  res.render("index");
+const userLog = false;
+
+router.get("/", loginCheck(userLog), (req, res, next) => {
+  if (userLog) {
+    const loggedInUser = req.user;
+    res.render("index", { user: loggedInUser });
+  } else {
+    res.render("index");
+  }
 });
 
 router.get('/profile', loginCheck(), (req, res, next) => {

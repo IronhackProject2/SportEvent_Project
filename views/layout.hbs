@@ -15,7 +15,19 @@
    </head>
 
    <body>
-
+      {{#if user}}
+         <nav>
+            <a href="events">All Events</a>
+            <a href="profile">Profile</a>
+            <a href="logout">Log Out</a>
+         </nav>
+      {{else}}
+       <nav>
+            <a href="events">All Events</a>
+            <a href="signup">Sign Up</a>
+            <a href="login">Log In</a>
+         </nav>
+      {{/if}}
       {{{body}}}
 
       <script src="/js/script.js"></script>
