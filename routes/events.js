@@ -6,6 +6,7 @@ const { loginCheck } = require('./middlewares');
 const axios = require('axios');
 require("dotenv/config");
 
+
 // function to get url from address
 const getMapUrl = addressFromDB =>{
   
@@ -44,7 +45,7 @@ router.get('/events', (req, res, next) => {
 });
 
 router.get('/events/add', (req, res, next) => {
-  res.render('event/eventForm');
+  res.render('event/eventForm', { message : req.query.message });
 });
 
 router.post('/events/add', loginCheck(), (req, res, next) => {
@@ -109,7 +110,19 @@ router.post('/events/add', loginCheck(), (req, res, next) => {
     })
     .catch(err => next(err));
   })
-  .catch(err => next(err));
+  .catch(err => {
+    const url = require('url'); 
+    console.log('wrong address');
+    //add message
+    res.redirect(url.format ({
+      pathname: '/events/add',
+      query: {
+        "message" : "worng address"
+      }
+    }))
+    next(err);
+  });
+
   
 });
 

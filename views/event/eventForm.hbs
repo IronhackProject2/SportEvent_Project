@@ -1,38 +1,42 @@
 <h1>Add a new event </h1>
 <form action="/events/add" method="POST">
-	<label for="title">Title: </label>
-	<input type="text" name="title" id="title">
+	<label for="title">*Title: </label>
+	<input type="text" name="title" id="title" required>
 
 	<label for="description">Description: </label>
 	<input type="text" name="description" id="description">
 
 	{{!-- add sports divide with comma	 --}}
-	<label for="sports">Sports: </label>
-	<input type="text" name="sports" id="sports">
+	<label for="sports">*Sports: </label>
+	<input type="text" name="sports" id="sports" required>
 	
 	<label for="location">Location: </label>
 	<input type="text" name="location" id="location">
 	
 	<label for="address">
-		<label for="housenumber">House number: </label>
-		<input type="number" name="housenumber" id="housenumber">
-		<label for="street">Street: </label>
-		<input type="text" name="street" id="street">
-		<label for="city">City: </label>
-		<input type="text" name="city" id="city">
-		<label for="postcode">Postcode: </label>
-		<input type="number" name="postcode" id="postcode">
-		<label for="country">Country: </label>
-		<input type="text" name="country" id="country">
+		<label for="housenumber">*House number: </label>
+		<input type="number" name="housenumber" id="housenumber" required>
+		<label for="street">*Street: </label>
+		<input type="text" name="street" id="street" required>
+		<label for="city">*City: </label>
+		<input type="text" name="city" id="city" required>
+		<label for="postcode">*Postcode: </label>
+		<input type="number" name="postcode" id="postcode" required>
+		<label for="country">*Country: </label>
+		<input type="text" name="country" id="country" required>
 	</label>
 	
-    <label for="startDate">Beginning: </label>
-	<input type="date" name="startDate" id="startDate">
-	<input type="time" name="startTime" id="startTime">
+    <label for="startDate">*Beginning: </label>
+	<input type="date" name="startDate" id="startDate" required>
+	<input type="time" name="startTime" id="startTime" required>
 
-    <label for="endDate">Ending: </label>
-	<input type="date" name="endDate" id="endDate">
-	<input type="time" name="endTime" id="endTime">
+    <label for="endDate">*Ending: </label>
+	<input type="date" name="endDate" id="endDate" required>
+	<input type="time" name="endTime" id="endTime" required>
 
 	<button type="submit">Add this event</button>
 </form>
+<p>*required fields</p>
+{{#if message}}
+	<p>{{message}}</p>
+{{/if}}
