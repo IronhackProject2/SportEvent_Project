@@ -7,9 +7,9 @@
      {{/each}}
      <h2><a href="/events/add">Create a new event!</a></h2>
 
-    <div id='hiddenLat' style='display: none'>0</div>
-	<div id='hiddenLon' style='display: none'>0</div>
-    <div id='hiddenPositions'>{{ positions }}</div>
+    <div id='hiddenLat' style='display: none'>{{centerLat}}</div>
+	<div id='hiddenLon' style='display: none'>{{centerLon}}</div>
+    <div id='hiddenPositions' style='display: none'>{{positions}}</div>
 
 	<div id='map' style='width: 400px; height: 300px;'></div>
 	<script src="/js/mapbox.js"></script>
