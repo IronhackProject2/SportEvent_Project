@@ -10,7 +10,7 @@ require("dotenv/config");
 const getMapUrl = addressFromDB =>{
   
   const accessToken = process.env.ACCESS_TOKEN
-  console.log(accessToken);
+  console.log('VVVVVVVVVVVVVVVVVVVVVVVVVV', accessToken);
   let fullAddress = '';
   if (addressFromDB.houseNumber) {
     fullAddress += `${addressFromDB['houseNumber']}%20`
@@ -49,7 +49,7 @@ router.get('/events/add', (req, res, next) => {
 
 router.post('/events/add', loginCheck(), (req, res, next) => {
   const creator = req.user._id;
-  
+  console.log('adding  event...')
   const { title, description, location, sports, startTime, startDate, endTime, endDate, housenumber, street, city, postcode, country} = req.body;
   
   
@@ -108,9 +108,12 @@ router.post('/events/add', loginCheck(), (req, res, next) => {
       res.redirect(`/events/${createdEvent._id}`);
     })
     .catch(err => next(err));
-  });
+  })
+  .catch(err => next(err));
   
 });
+
+
 
 
 router.get('/events/edit/:id', loginCheck(), (req, res, next) => {
@@ -216,55 +219,54 @@ router.post('/events/edit/:id', loginCheck(), (req, res, next) => {
   .catch(err => {
     next(err);
   })
- });
+});
+
+router.get('/events/delete/:id', loginCheck(), (req, res, next) => {
   
-  router.get('/events/delete/:id', loginCheck(), (req, res, next) => {
-    
-    const eventId = req.params.id;
-    const query = { _id: eventId }
-    
-    if (req.user.role !== 'admin') {
-      query.creator = req.user._id.toString();
-    } 
-    Event.findByIdAndDelete(query)
-    .then(() => {
-      res.redirect('/events')
+  const eventId = req.params.id;
+  const query = { _id: eventId }
+  
+  if (req.user.role !== 'admin') {
+    query.creator = req.user._id.toString();
+  } 
+  Event.findByIdAndDelete(query)
+  .then(() => {
+    res.redirect('/events')
+  })
+  .catch(err => {
+    next(err);
+  })
+});
+
+router.get('/events/:id', (req, res, next) => { 
+  const eventId = req.params.id;
+  const userId = req.user._id;
+  let editLink = null;
+  
+  Event.findById(eventId).populate('creator')
+  .then(eventFromDB => {
+    if (eventFromDB.creator._id.toString() === userId.toString()){
+      editLink = `<a href="/events/edit/${eventId}">Edit this event </a>`
+    }
+    Event.find().sort({'timeAndDate.starting': -1})
+    .then(eventsFromDB => {
+      let centerLat = eventFromDB.coordinates.latitude;
+      let centerLon = eventFromDB.coordinates.longitude;
+      let positions = [];
+      for (let event of eventsFromDB){
+        if (event.coordinates.latitude !== centerLat && event.coordinates.longitude !== centerLon){
+          positions.push( [event.coordinates.longitude, event.coordinates.latitude] );
+        }
+      };
+      res.render('event/eventDetails', { event: eventFromDB, editLink: editLink, positions: JSON.stringify(positions), centerLat: centerLat, centerLon: centerLon});
     })
     .catch(err => {
       next(err);
     })
-  });
-  
-  router.get('/events/:id', (req, res, next) => { 
-    const eventId = req.params.id;
-    const userId = req.user._id;
-    let editLink = null;
-    
-    Event.findById(eventId).populate('creator')
-    .then(eventFromDB => {
-      if (eventFromDB.creator._id.toString() === userId.toString()){
-        editLink = `<a href="/events/edit/${eventId}">Edit this event </a>`
-      }
-      Event.find().sort({'timeAndDate.starting': -1})
-      .then(eventsFromDB => {
-        let centerLat = eventFromDB.coordinates.latitude;
-        let centerLon = eventFromDB.coordinates.longitude;
-        let positions = [];
-        for (let event of eventsFromDB){
-          if (event.coordinates.latitude !== centerLat && event.coordinates.longitude !== centerLon){
-            positions.push( [event.coordinates.longitude, event.coordinates.latitude] );
-          }
-        };
-        res.render('event/eventDetails', { event: eventFromDB, editLink: editLink, positions: JSON.stringify(positions), centerLat: centerLat, centerLon: centerLon});
-      })
-      .catch(err => {
-        next(err);
-      })
-    })
-    .catch(err => {
-      next(err);
-    })
-  });
-  
-  module.exports = router;
-  
+  })
+  .catch(err => {
+    next(err);
+  })
+});
+
+module.exports = router;
