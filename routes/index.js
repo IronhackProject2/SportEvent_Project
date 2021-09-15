@@ -19,5 +19,4 @@ router.get('/profile', loginCheck(), (req, res, next) => {
   })
 })
 
-
 module.exports = router;
