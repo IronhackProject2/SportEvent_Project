@@ -1,4 +1,4 @@
-mapboxgl.accessToken = 'pk.eyJ1IjoicHJvZC1hc3RyaSIsImEiOiJja3RlNTkydDYwNG03MnBxbnJvZmd0aWhnIn0.eSYEto_HPz1pJlwzhhboig';
+mapboxgl.accessToken = 'pk.eyJ1IjoiaGFubmVzY2hvIiwiYSI6ImNrdGxjN3FnYzAwYWMyb3Iwa3U2cnFuNnQifQ.2_I4UhdaZZDZFqPpI1eCjw';
 
 const center = [document.querySelector('#hiddenLon').innerHTML, document.querySelector('#hiddenLat').innerHTML]; //[13.4532321, 52.5331092]
 const coords = JSON.parse(document.querySelector('#hiddenPositions').innerHTML);
