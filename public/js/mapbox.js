@@ -11,11 +11,6 @@ const map = new mapboxgl.Map({
 	zoom: 9 // starting zoom
 });
 
-const marker = new mapboxgl.Marker({
-	color: 'red',
-	draggable: false
-}).setLngLat(center)
-.addTo(map)
 
 coords.forEach(function (coord) {
 	new mapboxgl.Marker({
@@ -24,6 +19,12 @@ coords.forEach(function (coord) {
 	}).setLngLat(coord)
 	.addTo(map)
 })
+
+const marker = new mapboxgl.Marker({
+	color: 'red',
+	draggable: false
+}).setLngLat(center)
+.addTo(map)
 
 const nav = new mapboxgl.NavigationControl();
 

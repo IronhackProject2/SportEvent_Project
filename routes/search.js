@@ -18,16 +18,16 @@ router.post('/search', (req, res, next) => {
                     }
                 }
             })
+            console.log(eventList);
               // center the map on the first event
-              let centerLat = eventsFromDB[0].coordinates.latitude;
-              let centerLon = eventsFromDB[0].coordinates.longitude;
+              let centerLat = eventList[0].coordinates.latitude;
+              let centerLon = eventList[0].coordinates.longitude;
               let positions = [];
               // add all the other events positions
-              for (let event of eventsFromDB){
-                  if (event.coordinates.latitude !== centerLat && event.coordinates.longitude !== centerLon){
-                  positions.push( [event.coordinates.longitude, event.coordinates.latitude] );
-                  }
-              };
+              for (let i=1; i < eventList.length; i++){
+                    positions.push( [eventList[i].coordinates.longitude, eventList[i].coordinates.latitude] );
+              }
+              console.log(positions);
             res.render("search", { eventList: eventList, word: searchTerm, positions: JSON.stringify(positions), centerLat: centerLat, centerLon: centerLon });
         })
         .catch(err => next(err));

@@ -32,11 +32,9 @@ router.get('/events', (req, res, next) => {
     let centerLon = eventsFromDB[0].coordinates.longitude;
     let positions = [];
     // add all the other events positions
-    for (let event of eventsFromDB){
-      if (event.coordinates.latitude !== centerLat && event.coordinates.longitude !== centerLon){
-        positions.push( [event.coordinates.longitude, event.coordinates.latitude] );
-      }
-    };
+    for (let i=1; i < eventsFromDB.length; i++){
+      positions.push( [eventsFromDB[i].coordinates.longitude, eventsFromDB[i].coordinates.latitude] );
+}
     res.render('event/events', { eventList: eventsFromDB, positions: JSON.stringify(positions), centerLat: centerLat, centerLon: centerLon});
   })
   .catch(err => {
@@ -266,11 +264,9 @@ router.get('/events/:id', (req, res, next) => {
       let centerLat = eventFromDB.coordinates.latitude;
       let centerLon = eventFromDB.coordinates.longitude;
       let positions = [];
-      for (let event of eventsFromDB){
-        if (event.coordinates.latitude !== centerLat && event.coordinates.longitude !== centerLon){
-          positions.push( [event.coordinates.longitude, event.coordinates.latitude] );
-        }
-      };
+      for (let i=1; i < eventsFromDB.length; i++){
+        positions.push( [eventsFromDB[i].coordinates.longitude, eventsFromDB[i].coordinates.latitude] );
+  }
       res.render('event/eventDetails', { event: eventFromDB, editLink: editLink, positions: JSON.stringify(positions), centerLat: centerLat, centerLon: centerLon});
     })
     .catch(err => {
