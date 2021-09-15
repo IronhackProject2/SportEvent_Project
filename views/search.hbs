@@ -5,3 +5,10 @@
 	    </a></h3>
          <small>{{timeAndDate.starting}}</small>
      {{/each}}
+
+    <div id='hiddenLat' style='display: none'>{{centerLat}}</div>
+	<div id='hiddenLon' style='display: none'>{{centerLon}}</div>
+    <div id='hiddenPositions' style='display: none'>{{positions}}</div>
+
+	<div id='map' style='width: 400px; height: 300px;'></div>
+	<script src="/js/mapbox.js"></script>
