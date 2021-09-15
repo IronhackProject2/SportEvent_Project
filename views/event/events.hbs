@@ -1,4 +1,8 @@
 <h1> All the events </h1>
+<form action="/search" method="POST">
+    <input type="text" placeholder="Search" name="search" id="search">
+    <button type="submit">Search</button>
+</form>
     {{#each eventList}}
         <h3><a href="/events/{{_id}}">
 		    <p>{{title}}</p>

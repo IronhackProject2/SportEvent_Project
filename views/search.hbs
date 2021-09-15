@@ -1,0 +1,7 @@
+   <h1>Search Results for {{word}}</h1>
+   {{#each eventList}}
+        <h3><a href="/events/{{_id}}">
+		    <p>{{title}}</p>
+	    </a></h3>
+         <small>{{timeAndDate.starting}}</small>
+     {{/each}}
