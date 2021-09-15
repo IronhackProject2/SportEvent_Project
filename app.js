@@ -23,7 +23,7 @@ require("./config")(app);
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const DB_URL = process.env.MONGODB_URI; //this in dotenv
-console.log(DB_URL);
+
 app.use(
 	session({
 		secret: process.env.SESSION_SECRET, //this in dotenv could be any string
@@ -94,6 +94,8 @@ app.use("/", auth);
 const events = require("./routes/events");
 app.use("/", events);
 
+const search = require("./routes/search");
+app.use("/", search);
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);
