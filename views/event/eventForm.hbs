@@ -1,4 +1,8 @@
 <h1>Add a new event </h1>
+<p>*required fields</p>
+{{#if message}}
+	<p class='redText'>{{message}}</p>
+{{/if}}
 <form action="/events/add" method="POST">
 	<label for="title">*Title: </label>
 	<input type="text" name="title" id="title" required>
@@ -26,17 +30,15 @@
 		<input type="text" name="country" id="country" required>
 	</label>
 	
+	<div class='halfbuttons'>
+
     <label for="startDate">*Beginning: </label>
 	<input type="date" name="startDate" id="startDate" required>
 	<input type="time" name="startTime" id="startTime" required>
-
+	
     <label for="endDate">*Ending: </label>
 	<input type="date" name="endDate" id="endDate" required>
 	<input type="time" name="endTime" id="endTime" required>
-
+</div>
 	<button type="submit">Add this event</button>
 </form>
-<p>*required fields</p>
-{{#if message}}
-	<p>{{message}}</p>
-{{/if}}

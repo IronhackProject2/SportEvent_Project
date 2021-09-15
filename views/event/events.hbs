@@ -4,9 +4,9 @@
     <button type="submit">Search</button>
 </form>
     {{#each eventList}}
-        <h3><a href="/events/{{_id}}">
+        <h2><a href="/events/{{_id}}">
 		    <p>{{title}}</p>
-	    </a></h3>
+	    </a></h2>
         <small>{{timeAndDate.starting}}</small>
      {{/each}}
      <h2><a href="/events/add">Create a new event!</a></h2>

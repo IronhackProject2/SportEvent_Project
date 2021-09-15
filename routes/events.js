@@ -9,9 +9,7 @@ require("dotenv/config");
 
 // function to get url from address
 const getMapUrl = addressFromDB =>{
-  
   const accessToken = process.env.ACCESS_TOKEN
-  console.log('VVVVVVVVVVVVVVVVVVVVVVVVVV', accessToken);
   let fullAddress = '';
   if (addressFromDB.houseNumber) {
     fullAddress += `${addressFromDB['houseNumber']}%20`
@@ -34,7 +32,7 @@ router.get('/events', (req, res, next) => {
     // add all the other events positions
     for (let i=1; i < eventsFromDB.length; i++){
       positions.push( [eventsFromDB[i].coordinates.longitude, eventsFromDB[i].coordinates.latitude] );
-}
+    }
     res.render('event/events', { eventList: eventsFromDB, positions: JSON.stringify(positions), centerLat: centerLat, centerLon: centerLon});
   })
   .catch(err => {
@@ -110,17 +108,15 @@ router.post('/events/add', loginCheck(), (req, res, next) => {
   })
   .catch(err => {
     const url = require('url'); 
-    console.log('wrong address');
-    //add message
     res.redirect(url.format ({
       pathname: '/events/add',
       query: {
-        "message" : "worng address"
+        'message' : 'invalid address'
       }
     }))
     next(err);
   });
-
+  
   
 });
 
@@ -266,7 +262,7 @@ router.get('/events/:id', (req, res, next) => {
       let positions = [];
       for (let i=1; i < eventsFromDB.length; i++){
         positions.push( [eventsFromDB[i].coordinates.longitude, eventsFromDB[i].coordinates.latitude] );
-  }
+      }
       res.render('event/eventDetails', { event: eventFromDB, editLink: editLink, positions: JSON.stringify(positions), centerLat: centerLat, centerLon: centerLon});
     })
     .catch(err => {
