@@ -6,7 +6,6 @@ const { loginCheck } = require('./middlewares');
 const axios = require('axios');
 require("dotenv/config");
 
-
 // function to get url from address
 const getMapUrl = addressFromDB =>{
   
@@ -34,8 +33,12 @@ router.get('/events', (req, res, next) => {
     // add all the other events positions
     for (let i=1; i < eventsFromDB.length; i++){
       positions.push( [eventsFromDB[i].coordinates.longitude, eventsFromDB[i].coordinates.latitude] );
-}
-    res.render('event/events', { eventList: eventsFromDB, positions: JSON.stringify(positions), centerLat: centerLat, centerLon: centerLon});
+    }
+    
+   
+      const loggedInUser = req.user;
+      res.render('event/events', { eventList: eventsFromDB, positions: JSON.stringify(positions), centerLat: centerLat, centerLon: centerLon, user: loggedInUser});
+  
   })
   .catch(err => {
     next(err);
@@ -43,7 +46,9 @@ router.get('/events', (req, res, next) => {
 });
 
 router.get('/events/add', (req, res, next) => {
-  res.render('event/eventForm', { message : req.query.message });
+    const loggedInUser = req.user;
+    res.render('event/eventForm', { message : req.query.message, user: loggedInUser });
+
 });
 
 router.post('/events/add', loginCheck(), (req, res, next) => {
@@ -140,7 +145,7 @@ router.get('/events/edit/:id', loginCheck(), (req, res, next) => {
     const endDate = eventFromDB.timeAndDate.ending.toISOString().split("T")[0];
     
     if (loggedInUser._id.toString() === eventFromDB.creator.toString() || loggedInUser.role === 'admin') {
-      res.render('event/eventEdit', { event: eventFromDB, startTime: startTime, startDate: startDate, endDate: endDate, endTime: endTime });
+      res.render('event/eventEdit', { event: eventFromDB, startTime: startTime, startDate: startDate, endDate: endDate, endTime: endTime, user: loggedInUser });
       
     } else {
       res.redirect(`/events/${eventId}`)
@@ -233,7 +238,7 @@ router.post('/events/edit/:id', loginCheck(), (req, res, next) => {
 });
 
 router.get('/events/delete/:id', loginCheck(), (req, res, next) => {
-  
+  const loggedInUser = req.user;
   const eventId = req.params.id;
   const query = { _id: eventId }
   
@@ -267,7 +272,7 @@ router.get('/events/:id', (req, res, next) => {
       for (let i=1; i < eventsFromDB.length; i++){
         positions.push( [eventsFromDB[i].coordinates.longitude, eventsFromDB[i].coordinates.latitude] );
   }
-      res.render('event/eventDetails', { event: eventFromDB, editLink: editLink, positions: JSON.stringify(positions), centerLat: centerLat, centerLon: centerLon});
+      res.render('event/eventDetails', { event: eventFromDB, editLink: editLink, positions: JSON.stringify(positions), centerLat: centerLat, centerLon: centerLon, user:loggedInUser});
     })
     .catch(err => {
       next(err);
