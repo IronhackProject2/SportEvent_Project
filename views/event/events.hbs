@@ -1,4 +1,4 @@
-<h1> All the events </h1>
+<h1 class='second-color'> Events </h1>
 
 <div id='allevents'>
     
@@ -7,7 +7,11 @@
             <h3><a href="/events/{{_id}}" eventId = "{{_id}}" class="title">{{title}}</a></h3>
            <p>{{#if location}}{{location}} {{/if}} {{starting}}</p>
         {{/each}}
-        <h2><a href="/events/add">Create a new event!</a></h2>
+   
+         <form class='newEvent eventForm' action="/events/add" method="GET">
+	        <button type="submit">Create a new event</button>
+         </form>
+
     </div>
 
     <div class='mapBox'>

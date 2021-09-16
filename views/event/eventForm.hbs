@@ -1,4 +1,7 @@
 <h1>Add a new event </h1>
+{{#if message}}
+	<p class='redText'>{{message}}</p>
+{{/if}}
 <p><small>*required fields</small></p>
 <form class='eventForm' action="/events/add" method="POST">
 	<label for="title">*Title: </label>
@@ -37,6 +40,3 @@
 
 	<button type="submit">Add this event</button>
 </form>
-{{#if message}}
-	<p>{{message}}</p>
-{{/if}}
