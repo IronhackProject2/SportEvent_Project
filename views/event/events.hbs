@@ -4,7 +4,7 @@
     
     <div class='eventList' >
         {{#each eventList}}
-            <h3><a href="/events/{{_id}}" class="title">{{title}}</a></h3>
+            <h3><a href="/events/{{_id}}" eventId = "{{_id}}" class="title">{{title}}</a></h3>
            <p>{{#if location}}{{location}} {{/if}} {{starting}}</p>
         {{/each}}
         <h2><a href="/events/add">Create a new event!</a></h2>
