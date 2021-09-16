@@ -2,7 +2,7 @@
 <div id='allevents'>
   <div class='eventList' >
         {{#each eventList}}
-            <h3><a href="/events/{{_id}}">{{title}}</a></h3>
+            <h3><a href="/events/{{_id}}" class="title">{{title}}</a></h3>
             <p>{{#if location}}{{location}} {{/if}} {{starting}}</p>
         {{/each}}
         <form class='newEvent eventForm' action="/events/add" method="GET">
