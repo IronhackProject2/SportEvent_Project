@@ -1,39 +1,39 @@
 
 	<h1>Edit this event</h1>
 	{{#with event}}
-	<form action="/events/edit/{{_id}}" method="POST">
+	<form class='eventForm' action="/events/edit/{{_id}}" method="POST">
 		<label for="title">Title: </label>
-		<input type="text" name="title" id="title" value="{{title}}">
+		<input type="text" name="title" id="title" value="{{title}}" required>
 
 		<label for="description">Description: </label>
 		<input type="text" name="description" id="description" value="{{description}}">
 
 		<label for="sports">Sports: </label>
-		<input type="text" name="sports" id="sports" value="{{sports}}">
+		<input type="text" name="sports" id="sports" value="{{sports}}" required>
 	
 		<label for="location">Location: </label>
 		<input type="text" name="location" id="location" value="{{location}}">
 		
 		<label for="address">
 			<label for="housenumber">House number: </label>
-			<input type="number" name="housenumber" id="housenumber" value="{{address.houseNumber}}">
+			<input type="number" name="housenumber" id="housenumber" value="{{address.houseNumber}}" required>
 			<label for="street">Street: </label>
-			<input type="text" name="street" id="street" value="{{address.street}}">
+			<input type="text" name="street" id="street" value="{{address.street}}" required>
 			<label for="city">City: </label>
-			<input type="text" name="city" id="city" value="{{address.city}}">
+			<input type="text" name="city" id="city" value="{{address.city}}" required>
 			<label for="postcode">Postcode: </label>
-			<input type="number" name="postcode" id="postcode" value="{{address.postcode}}">
+			<input type="number" name="postcode" id="postcode" value="{{address.postcode}}" required>
 			<label for="country">Country: </label>
-			<input type="text" name="country" id="country" value="{{address.country}}">
+			<input type="text" name="country" id="country" value="{{address.country}}" required>
 		</label>
 		{{/with}}
 		<label for="startDate">Beginning: </label>
-		<input type="date" name="startDate" id="startDate"value="{{startDate}}" >
-		<input type="time" name="startTime" id="startTime" value="{{startTime}}">
+		<input type="date" name="startDate" id="startDate"value="{{startDate}}" required>
+		<input type="time" name="startTime" id="startTime" value="{{startTime}}"required>
 
     	<label for="endDate">Ending: </label>
-		<input type="date" name="endDate" id="endDate" value="{{endDate}}">
-		<input type="time" name="endTime" id="endTime" value="{{endTime}}">
+		<input type="date" name="endDate" id="endDate" value="{{endDate}}" required>
+		<input type="time" name="endTime" id="endTime" value="{{endTime}}" required>
 
 		<button type="submit">Update this event</button>
 	</form>

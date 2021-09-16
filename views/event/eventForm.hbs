@@ -1,5 +1,6 @@
 <h1>Add a new event </h1>
-<form action="/events/add" method="POST">
+<p><small>*required fields</small></p>
+<form class='eventForm' action="/events/add" method="POST">
 	<label for="title">*Title: </label>
 	<input type="text" name="title" id="title" required>
 
@@ -36,7 +37,6 @@
 
 	<button type="submit">Add this event</button>
 </form>
-<p>*required fields</p>
 {{#if message}}
 	<p>{{message}}</p>
 {{/if}}
