@@ -5,7 +5,7 @@ const User = require('../models/User.model');
 
 const userLog = false;
 
-router.get("/", loginCheck(userLog), (req, res, next) => {
+router.get("/", (req, res, next) => {
     const loggedInUser = req.user;
     res.render("index", { user: loggedInUser });
 });

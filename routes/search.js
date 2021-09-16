@@ -3,6 +3,7 @@ const Event = require('../models/Event');
 require("dotenv/config");
 
 router.post('/search', (req, res, next) => {
+    const loggedInUser = req.user;
     const searchTerm = req.body.search.toLowerCase();
     console.log(searchTerm);
     Event.find()
@@ -27,14 +28,14 @@ router.post('/search', (req, res, next) => {
               for (let i=1; i < eventList.length; i++){
                     positions.push( [eventList[i].coordinates.longitude, eventList[i].coordinates.latitude] );
               }
-              console.log(positions);
-            res.render("search", { eventList: eventList, word: searchTerm, positions: JSON.stringify(positions), centerLat: centerLat, centerLon: centerLon });
+            res.render("search", { eventList: eventList, word: searchTerm, positions: JSON.stringify(positions), centerLat: centerLat, centerLon: centerLon, user: loggedInUser });
         })
         .catch(err => next(err));
 });
 
 router.get("/search", (req, res, next) => {
-    res.render("search");
+    const loggedInUser = req.user;
+    res.render("search", { user: loggedInUser });
   });
 
   module.exports = router;
