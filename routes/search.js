@@ -19,7 +19,7 @@ router.post('/search', (req, res, next) => {
                     }
                 }
             })
-            console.log(eventList);
+           
               // center the map on the first event
               let centerLat = eventList[0].coordinates.latitude;
               let centerLon = eventList[0].coordinates.longitude;
@@ -27,6 +27,14 @@ router.post('/search', (req, res, next) => {
               // add all the other events positions
               for (let i=1; i < eventList.length; i++){
                     positions.push( [eventList[i].coordinates.longitude, eventList[i].coordinates.latitude] );
+              }
+              //formatted dates for display
+              for (ev of eventsFromDB){
+                const starting = ev.timeAndDate.starting.toLocaleString();
+                const ending = ev.timeAndDate.ending.toLocaleString();
+                ev.starting = starting;
+                ev.ending = ending;
+                console.log(ev)
               }
             res.render("search", { eventList: eventList, word: searchTerm, positions: JSON.stringify(positions), centerLat: centerLat, centerLon: centerLon, user: loggedInUser });
         })

@@ -1,16 +1,14 @@
 const router = require("express").Router();
 const { startSession } = require("../models/Event");
 const Event = require('../models/Event');
-// const User = require('../models/User.model');
+
 const { loginCheck } = require('./middlewares');
 const axios = require('axios');
 require("dotenv/config");
 
 // function to get url from address
 const getMapUrl = addressFromDB =>{
-  
   const accessToken = process.env.ACCESS_TOKEN
-  console.log('VVVVVVVVVVVVVVVVVVVVVVVVVV', accessToken);
   let fullAddress = '';
   if (addressFromDB.houseNumber) {
     fullAddress += `${addressFromDB['houseNumber']}%20`
@@ -34,11 +32,17 @@ router.get('/events', (req, res, next) => {
     for (let i=1; i < eventsFromDB.length; i++){
       positions.push( [eventsFromDB[i].coordinates.longitude, eventsFromDB[i].coordinates.latitude] );
     }
+    for (ev of eventsFromDB){
+      const starting = ev.timeAndDate.starting.toLocaleString();
+      const ending = ev.timeAndDate.ending.toLocaleString();
+      ev.starting = starting;
+      ev.ending = ending;
+      console.log(ev)
+    }
     
-   
-      const loggedInUser = req.user;
-      res.render('event/events', { eventList: eventsFromDB, positions: JSON.stringify(positions), centerLat: centerLat, centerLon: centerLon, user: loggedInUser});
-  
+    const loggedInUser = req.user;
+    res.render('event/events', { eventList: eventsFromDB, positions: JSON.stringify(positions), centerLat: centerLat, centerLon: centerLon, user: loggedInUser});
+    
   })
   .catch(err => {
     next(err);
@@ -46,16 +50,14 @@ router.get('/events', (req, res, next) => {
 });
 
 router.get('/events/add', (req, res, next) => {
-    const loggedInUser = req.user;
-    res.render('event/eventForm', { message : req.query.message, user: loggedInUser });
-
+  const loggedInUser = req.user;
+  res.render('event/eventForm', { message : req.query.message, user: loggedInUser });
+  
 });
 
 router.post('/events/add', loginCheck(), (req, res, next) => {
   const creator = req.user._id;
-  console.log('adding  event...')
   const { title, description, location, sports, startTime, startDate, endTime, endDate, housenumber, street, city, postcode, country} = req.body;
-  
   
   // converting form date 
   const start = startDate.split('-').concat(startTime.split(':'))
@@ -108,14 +110,12 @@ router.post('/events/add', loginCheck(), (req, res, next) => {
       sports: sports
     })
     .then(createdEvent => {
-      console.log(createdEvent);
       res.redirect(`/events/${createdEvent._id}`);
     })
     .catch(err => next(err));
   })
   .catch(err => {
     const url = require('url'); 
-    console.log('wrong address');
     //add message
     res.redirect(url.format ({
       pathname: '/events/add',
@@ -125,12 +125,7 @@ router.post('/events/add', loginCheck(), (req, res, next) => {
     }))
     next(err);
   });
-
-  
 });
-
-
-
 
 router.get('/events/edit/:id', loginCheck(), (req, res, next) => {
   const loggedInUser = req.user
@@ -218,15 +213,12 @@ router.post('/events/edit/:id', loginCheck(), (req, res, next) => {
           sports:sports
         }, { new: true })
         .then(updatedEvent => {
-          console.log(updatedEvent);
           res.redirect(`/events/${updatedEvent._id}`);
         })
         .catch(err => {
           next(err);
         })
       }
-      
-      
     })
     .catch(err => {
       next(err);
@@ -265,6 +257,9 @@ router.get('/events/:id', (req, res, next) => {
     if (eventFromDB.creator._id.toString() === userId.toString()){
       editLink = `<a href="/events/edit/${eventId}">Edit this event </a>`
     }
+    const starting = eventFromDB.timeAndDate.starting.toLocaleString();
+    const ending = eventFromDB.timeAndDate.ending.toLocaleString();
+    console.log(starting, ending)
     Event.find().sort({'timeAndDate.starting': -1})
     .then(eventsFromDB => {
       let centerLat = eventFromDB.coordinates.latitude;
@@ -272,8 +267,8 @@ router.get('/events/:id', (req, res, next) => {
       let positions = [];
       for (let i=1; i < eventsFromDB.length; i++){
         positions.push( [eventsFromDB[i].coordinates.longitude, eventsFromDB[i].coordinates.latitude] );
-  }
-      res.render('event/eventDetails', { event: eventFromDB, editLink: editLink, positions: JSON.stringify(positions), centerLat: centerLat, centerLon: centerLon, user:loggedInUser});
+      }
+      res.render('event/eventDetails', { event: eventFromDB, editLink: editLink, positions: JSON.stringify(positions), centerLat: centerLat, centerLon: centerLon, user:loggedInUser, starting: starting, ending: ending});
     })
     .catch(err => {
       next(err);

@@ -1,15 +1,11 @@
 <h1> All the events </h1>
 
 <div id='#allevents'>
-    <form action="/search" method="POST">
-        <input type="text" placeholder="Search" name="search" id="search">
-        <button type="submit">Search</button>
-    </form>
-
+    
     <div class='eventList' >
         {{#each eventList}}
             <h3><a href="/events/{{_id}}">{{title}}</a></h3>
-            <small>{{timeAndDate.starting}}</small>
+           <p>{{#if location}}{{location}} {{/if}} {{starting}}</p>
         {{/each}}
         <h2><a href="/events/add">Create a new event!</a></h2>
     </div>

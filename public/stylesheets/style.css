@@ -2,7 +2,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap");
 
 body {
-  padding: 50px;
+  padding: 0;
+  margin: 0;
   font-family: "Roboto Mono", monospace;
   background-color: azure;
   display: flex;
@@ -61,7 +62,7 @@ a {
   width: 100%;
 }
 
-
+#search,
 .eventForm input,
 .eventForm button {
 
