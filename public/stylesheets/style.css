@@ -152,6 +152,7 @@ nav {
 
 .nav-left span {
   margin-left: 10px;
+  margin-right: 10px;
   font-family: "Montserrat", sans-serif;
   font-size: 15px;
   color: #fff;
@@ -197,10 +198,16 @@ nav {
   font-family: "Montserrat", sans-serif;
   font-size: 15px;
   box-sizing: border-box;
-  margin: 0;
-  border: 0;
-  border-radius: 0;
-  width: 150px;
+  border: 0px;
+  font-size: 14px;
+  outline: 0;
+  padding: 4px;
+  margin-left: 0px;
+  border-left: 0px;
+  padding-left: 0px;
+  
+  width: 100%;
+  align-self:center;
 }
 
 .search-btn {
