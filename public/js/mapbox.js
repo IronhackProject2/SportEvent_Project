@@ -15,8 +15,9 @@ const map = new mapboxgl.Map({
 coords.forEach(function (coord) {
 	new mapboxgl.Marker({
 		color: 'blue',
-		draggable: false
+		draggable: false,
 	}).setLngLat(coord)
+	.setPopup(new mapboxgl.Popup().setHTML("<h1>Hello World!</h1>"))
 	.addTo(map)
 })
 
