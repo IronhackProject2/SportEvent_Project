@@ -6,12 +6,8 @@ const User = require('../models/User.model');
 const userLog = false;
 
 router.get("/", loginCheck(userLog), (req, res, next) => {
-  if (userLog) {
     const loggedInUser = req.user;
     res.render("index", { user: loggedInUser });
-  } else {
-    res.render("index");
-  }
 });
 
 router.get('/profile', loginCheck(), (req, res, next) => {
