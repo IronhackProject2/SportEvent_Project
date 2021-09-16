@@ -1,7 +1,7 @@
-
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap");
 
 body {
+
   padding: 0;
   margin: 0;
   font-family: "Roboto Mono", monospace;
@@ -42,8 +42,6 @@ a {
   align-self: center;
 }
 
-
-
 .eventForm h2 {
   display: flex;
   justify-content: center;
@@ -62,17 +60,14 @@ a {
   width: 100%;
 }
 
-#search,
 .eventForm input,
 .eventForm button {
-
   box-sizing: border-box;
   font-size: 14px;
   outline: 0;
   padding: 4px;
   width: 100%;
   margin-bottom: 20px;
-
 }
 
 .eventForm button {
@@ -87,9 +82,7 @@ a {
   text-decoration: none;
   text-transform: uppercase;
   transition: 0.3s ease background;
-
 }
-
 
 .eventForm button:hover {
   background: #fff;
@@ -110,20 +103,20 @@ a {
   color: crimson;
 }
 
-.first-color { 
-  background: #ffcbcb; 
+.first-color {
+  background: #ffcbcb;
 }
 
-.second-color { 
-  background: #ffb5b5; 
+.second-color {
+  background: #ffb5b5;
 }
 
-.third-color { 
-  background: #407088; 
+.third-color {
+  background: #407088;
 }
 
-.fourth-color { 
-  background: #132743; 
+.fourth-color {
+  background: #132743;
 }
 
 nav {
@@ -215,13 +208,37 @@ nav {
 }
 
 #content-wrap {
-  padding-bottom: 2.5rem; /* Footer height */
+  padding-top: 70px; /* Navbar height*/
+  padding-bottom: 70px; /* Footer height */
 }
 
 #footer {
-  background-color: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(85, 82, 82);
+  color: #fff;
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: 2.5rem; /* Footer height */
+  height: 70px;
+}
+
+.names {
+  margin: 5px 0px;
+  font-family: "Montserrat", sans-serif;
+  font-size: 15px;
+}
+
+.line {
+  margin: 5px 0px;
+  width: 90%;
+  border-bottom: 1px solid #fff;
+}
+
+.copyright {
+  margin: 5px 0px;
+  font-family: "Montserrat", sans-serif;
+  font-size: 10px;
 }
