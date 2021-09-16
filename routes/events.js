@@ -21,10 +21,10 @@ const getMapUrl = addressFromDB =>{
 
 
 router.get('/events', (req, res, next) => {
-  const loggedInUser = req.user;
   // get all events from the database sorted by starting time
   Event.find().sort({'timeAndDate.starting': -1})
   .then(eventsFromDB => {
+    const loggedInUser = req.user;
     if (eventsFromDB.length === 0) {
       console.log("hihi");
       res.render('event/events', { user: loggedInUser });
@@ -37,8 +37,6 @@ router.get('/events', (req, res, next) => {
       for (let i=1; i < eventsFromDB.length; i++){
         positions.push( [eventsFromDB[i].coordinates.longitude, eventsFromDB[i].coordinates.latitude] );
       }
-        res.render('event/events', { eventList: eventsFromDB, positions: JSON.stringify(positions), centerLat: centerLat, centerLon: centerLon, user: loggedInUser});
-    }
 
     for (ev of eventsFromDB){
       const starting = ev.timeAndDate.starting.toLocaleString();
@@ -47,10 +45,8 @@ router.get('/events', (req, res, next) => {
       ev.ending = ending;
       console.log(ev)
     }
-    
-    const loggedInUser = req.user;
     res.render('event/events', { eventList: eventsFromDB, positions: JSON.stringify(positions), centerLat: centerLat, centerLon: centerLon, user: loggedInUser});
-    
+  }
   })
   .catch(err => {
     next(err);
