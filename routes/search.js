@@ -25,7 +25,7 @@ router.post('/search', (req, res, next) => {
               let centerLon = eventList[0].coordinates.longitude;
               let positions = [];
               // add all the other events positions
-              for (let i=1; i < eventList.length; i++){
+              for (let i=0; i < eventList.length; i++){
                     positions.push( [eventList[i].coordinates.longitude, eventList[i].coordinates.latitude] );
               }
               //formatted dates for display
