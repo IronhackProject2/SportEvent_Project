@@ -4,7 +4,7 @@ body {
 
   padding: 0;
   margin: 0;
-  font-family: "Roboto Mono", monospace;
+  font-family: "Montserrat", sans-serif;
   background-color: azure;
   display: flex;
   flex-direction: column;
