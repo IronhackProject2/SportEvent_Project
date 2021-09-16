@@ -255,6 +255,7 @@ router.get('/events/delete/:id', loginCheck(), (req, res, next) => {
 });
 
 router.get('/events/:id', (req, res, next) => { 
+  const loggedInUser = req.user;
   const eventId = req.params.id;
   const userId = req.user._id;
   let editLink = null;
