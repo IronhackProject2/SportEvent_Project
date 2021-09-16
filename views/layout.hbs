@@ -19,19 +19,45 @@
    <body>
       {{#if user}}
          <nav>
-            <a href="/events">All Events</a>
-            <a href="/profile">Profile</a>
-            <a href="/logout">Log Out</a>
+            <div class="nav-left">
+               <a href="/"><img src="/images/home.png" alt="home" width="20px" height="20px">
+               <span>Home</span>
+               </a>
+            </div>
+            <div class="nav-right">
+               <div class="search-bar">
+                  <form action="/search" method="POST" class="search-form">
+                     <input type="text" placeholder="Search" name="search" id="search">
+                     <button type="submit" class="search-btn"><img src="/images/search.png" alt="search" width="20px" height="20px"></button>
+                  </form>
+               </div>
+               <a href="/events">All Events</a>
+               <a href="/profile">Profile</a>
+               <a href="/logout">Log Out</a>
+            </div>
          </nav>
       {{else}}
-       <nav>
-            <a href="/events">All Events</a>
-            <a href="/signup">Sign Up</a>
-            <a href="/login">Log In</a>
+      <nav>
+            <div class="nav-left">
+               <a href="/"><img src="/images/home.png" alt="home" width="20px" height="20px"><span>Home</span></a>
+            </div>
+            <div class="nav-right">
+               <div class="search-bar">
+                  <form action="/search" method="POST" class="search-form">
+                     <input type="text" placeholder="Search" name="search" id="search">
+                     <button type="submit" class="search-btn"><img src="/images/search.png" alt="search" width="20px" height="20px"></button>
+                  </form>
+               </div>
+               <a href="/events">All Events</a>
+               <a href="/signup">Sign Up</a>
+               <a href="/login">Log In</a>
+            </div>
          </nav>
       {{/if}}
-      {{{body}}}
-
+      <div id="content-wrap">
+         {{{body}}}
+      </div>
+      <footer id="footer"></footer>
       <script src="/js/script.js"></script>
    </body>
 
