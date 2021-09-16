@@ -1,12 +1,11 @@
 
-<h1>Hello {{user.username}} 👋</h1>
+<h1>Hello {{user.username}}</h1>
+<div class='eventList' >
     {{#each eventList}}
-        <a href="/events/{{_id}}">
-		    <p>{{title}}</p>
-	    </a>
-        
+        <a href="/events/{{_id}}"> {{title}}</a>
         <small>{{timeAndDate.starting}}</small>
      {{/each}}
+</div>
 <h3><a href="/events/add">Create a new event!</a></h3>no
 <h3> <a href="/events">View all events </a></h3>
 <a href="/logout">Log out 🚪</a>

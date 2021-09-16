@@ -1,14 +1,15 @@
-   <h1>Search Results for {{word}}</h1>
-   {{#each eventList}}
-        <h3><a href="/events/{{_id}}">
-		    <p>{{title}}</p>
-	    </a></h3>
-         <small>{{timeAndDate.starting}}</small>
-     {{/each}}
+<h1>Search Results for {{word}}</h1>
 
-    <div id='hiddenLat' style='display: none'>{{centerLat}}</div>
-	<div id='hiddenLon' style='display: none'>{{centerLon}}</div>
-    <div id='hiddenPositions' style='display: none'>{{positions}}</div>
+<div class='eventList' >
+    {{#each eventList}}
+        <a href="/events/{{_id}}"> {{title}}</a>
+        <small>{{timeAndDate.starting}}</small>
+    {{/each}}
+</div>
 
-	<div id='map' style='width: 400px; height: 300px;'></div>
-	<script src="/js/mapbox.js"></script>
+<div id='hiddenLat' style='display: none'>{{centerLat}}</div>
+<div id='hiddenLon' style='display: none'>{{centerLon}}</div>
+<div id='hiddenPositions' style='display: none'>{{positions}}</div>
+
+<div id='map' style='width: 400px; height: 300px;'></div>
+<script src="/js/mapbox.js"></script>

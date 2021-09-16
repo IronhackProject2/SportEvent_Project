@@ -34,12 +34,12 @@ a {
   font-size: 1.5em;
 }
 
-form {
+.eventForm {
   margin: 30px auto;
   width: 380px;
 }
 
-form label {
+.eventForm label {
   color: #132743;
   display: inline-block;
   margin-bottom: 10px;
@@ -47,8 +47,8 @@ form label {
   width: 100%;
 }
 
-form input,
-form button {
+.eventForm input,
+.eventForm button {
   box-sizing: border-box;
   font-size: 14px;
   outline: 0;
@@ -57,7 +57,7 @@ form button {
   margin-bottom: 20px;
 }
 
-form button {
+.eventForm button {
   background: #407088;
   border: 1px solid #132743;
   border-radius: 5px;
@@ -72,7 +72,7 @@ form button {
   /* width: 100%; */
 }
 
-form button:hover {
+.eventForm button:hover {
   background: #fff;
   color: #407088;
   transition: 0.3s ease background;
@@ -102,7 +102,7 @@ ul li {
   line-height: 20px;
 }
 
-#form h2 {
+#.eventForm h2 {
   display: flex;
   justify-content: center;
 }
