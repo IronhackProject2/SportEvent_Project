@@ -1,3 +1,4 @@
+
 {{#with event}}
 <div class='eventDetails' >
 	<h1>{{ title }}</h1>
@@ -20,6 +21,13 @@
 	<div id='hiddenPositions' style='display: none'>{{positions}}</div>
 {{{editLink}}}
 
-	<h3> <a href="/events">Back to all events </a></h3>
+<div id='allevents'>
+<form class='newEvent eventForm' action="/events/" method="GET">
+	        <button type="submit">Back to the events list</button>
+         </form>
+	<div class='mapBox'>
 	<div id='map'></div>
 	<script src="/js/mapbox.js"></script>
+
+	</div>
+</div>

@@ -258,7 +258,9 @@ router.get('/events/:id', (req, res, next) => {
   Event.findById(eventId).populate('creator')
   .then(eventFromDB => {
     if (eventFromDB.creator._id.toString() === userId.toString()){
-      editLink = `<a href="/events/edit/${eventId}">Edit this event </a>`
+      editLink = `<form class='newEvent eventForm' action="/events/edit/${eventId}" method="GET">
+      <button type="submit">Edit this event</button>
+     </form>`
     }
     const starting = eventFromDB.timeAndDate.starting.toLocaleString();
     const ending = eventFromDB.timeAndDate.ending.toLocaleString();
