@@ -206,6 +206,7 @@ nav {
 }
 
 #content-wrap {
+  padding-top: 70px; /* Navbar height*/
   padding-bottom: 70px; /* Footer height */
 }
 

@@ -78,10 +78,10 @@ app.use(passport.session());
 // end of passport config
 
 // default value for title local
-const projectName = "sport-events";
+const projectName = "honis";
 const capitalized = (string) => string[0].toUpperCase() + string.slice(1).toLowerCase();
 
-app.locals.title = `${capitalized(projectName)} created with IronLauncher`;
+app.locals.title = `${capitalized(projectName)} - All Sports Events You Want!`;
 
 // 👇 Start handling routes here
 const index = require("./routes/index");
