@@ -16,6 +16,7 @@ const getMapUrl = addressFromDB =>{
   // add contry later (use country code)
   fullAddress +=`${addressFromDB['street'].replace(/\s/g, '%20')}%20${addressFromDB['city'].replace(/\s/g, '%20')}.json?}`
   const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${fullAddress}${accessToken}`
+  console.log(url);
   return url
 }
 
