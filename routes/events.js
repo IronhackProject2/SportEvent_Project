@@ -43,7 +43,6 @@ router.get('/events', (req, res, next) => {
       const ending = ev.timeAndDate.ending.toLocaleString();
       ev.starting = starting;
       ev.ending = ending;
-      console.log(ev)
     }
     res.render('event/events', { eventList: eventsFromDB, positions: JSON.stringify(positions), centerLat: centerLat, centerLon: centerLon, user: loggedInUser});
   }
