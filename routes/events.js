@@ -271,7 +271,7 @@ router.get('/events/:id', (req, res, next) => {
       let centerLat = eventFromDB.coordinates.latitude;
       let centerLon = eventFromDB.coordinates.longitude;
       let positions = [];
-      for (let i=1; i < eventsFromDB.length; i++){
+      for (let i=0; i < eventsFromDB.length; i++){
         positions.push( [eventsFromDB[i].coordinates.longitude, eventsFromDB[i].coordinates.latitude] );
       }
       res.render('event/eventDetails', { event: eventFromDB, editLink: editLink, positions: JSON.stringify(positions), centerLat: centerLat, centerLon: centerLon, user:loggedInUser, starting: starting, ending: ending});
