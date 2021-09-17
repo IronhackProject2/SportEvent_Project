@@ -12,13 +12,15 @@ const map = new mapboxgl.Map({
 
 if (document.querySelector(".title")) {
 	// set title and href for popups
-	console.log("hi");
 const titles = [];
 const hrefs = [];
 document.querySelectorAll(".title").forEach(el=> titles.push(el.outerText));
 document.querySelectorAll(".title").forEach(el=> hrefs.push(el.href.slice(el.href.indexOf('events')-1)));
 const title = titles[0];
 const href = hrefs[0];
+console.log(titles);
+console.log(center);
+console.log(coords);
 
 coords.forEach(function (coord, i) {
 	new mapboxgl.Marker({
@@ -47,7 +49,8 @@ const popup = new mapboxgl.Popup({
 else {
 	//set detail page map
 	const detailtitle = document.querySelector(".detailtitle").innerText;
-
+	console.log(center);
+	console.log(coords);
 	const marker = new mapboxgl.Marker({
 		color: 'red',
 		draggable: false

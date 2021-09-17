@@ -27,7 +27,6 @@ router.get('/events', (req, res, next) => {
   .then(eventsFromDB => {
     const loggedInUser = req.user;
     if (eventsFromDB.length === 0) {
-      console.log("hihi");
       res.render('event/events', { user: loggedInUser });
     } else {
       // center the map on the first event
@@ -35,7 +34,7 @@ router.get('/events', (req, res, next) => {
       let centerLon = eventsFromDB[0].coordinates.longitude;
       let positions = [];
       // add all the other events positions
-      for (let i=1; i < eventsFromDB.length; i++){
+      for (let i=0; i < eventsFromDB.length; i++){
         positions.push( [eventsFromDB[i].coordinates.longitude, eventsFromDB[i].coordinates.latitude] );
       }
 
@@ -253,16 +252,20 @@ router.get('/events/delete/:id', loginCheck(), (req, res, next) => {
 router.get('/events/:id', (req, res, next) => { 
   const loggedInUser = req.user;
   const eventId = req.params.id;
-  const userId = req.user._id;
+  
   let editLink = null;
   
   Event.findById(eventId).populate('creator')
   .then(eventFromDB => {
-    if (eventFromDB.creator._id.toString() === userId.toString()){
-      editLink = `<form class='newEvent eventForm' action="/events/edit/${eventId}" method="GET">
-      <button type="submit">Edit this event</button>
-     </form>`
+    if (loggedInUser) {
+      const userId = req.user._id;
+      if (eventFromDB.creator._id.toString() === userId.toString()){
+        editLink = `<form class='newEvent eventForm' action="/events/edit/${eventId}" method="GET">
+        <button type="submit">Edit this event</button>
+       </form>`
+      }
     }
+    
     const starting = eventFromDB.timeAndDate.starting.toLocaleString();
     const ending = eventFromDB.timeAndDate.ending.toLocaleString();
     console.log(starting, ending)
