@@ -1,13 +1,23 @@
+{{#if message}}
+        <h1>{{message}}</h1>
+        <form class='newEvent eventForm' action="/events/add" method="GET">
+            <button type="submit">Create a new event</button>
+        </form>
+        <form class='newEvent eventForm' action="/events/" method="GET">
+	        <button type="submit">View all events!</button>
+        </form>
+{{else}}
 <h1>Search Results for {{word}}</h1>
 <div id='allevents'>
   <div class='eventList' >
-        {{#each eventList}}
-            <h3><a href="/events/{{_id}}" class="title">{{title}}</a></h3>
-            <p>{{#if location}}{{location}} {{/if}} {{starting}}</p>
-        {{/each}}
-        <form class='newEvent eventForm' action="/events/add" method="GET">
-	        <button type="submit">Create a new event</button>
-         </form>
+    
+    {{#each eventList}}
+        <h3><a href="/events/{{_id}}" class="title">{{title}}</a></h3>
+        <p>{{#if location}}{{location}} {{/if}} {{starting}}</p>
+    {{/each}}
+    <form class='newEvent eventForm' action="/events/add" method="GET">
+        <button type="submit">Create a new event</button>
+        </form>
     </div>
 
 <div id='hiddenLat' style='display: none'>{{centerLat}}</div>
@@ -20,3 +30,8 @@
 </div>
 
 </div>
+
+<form class='newEvent eventForm' action="/events/" method="GET">
+	<button type="submit">View all events!</button>
+</form>
+{{/if}}

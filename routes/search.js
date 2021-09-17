@@ -19,24 +19,29 @@ router.post('/search', (req, res, next) => {
                     }
                 }
             })
-           
-              // center the map on the first event
-              let centerLat = eventList[0].coordinates.latitude;
-              let centerLon = eventList[0].coordinates.longitude;
-              let positions = [];
-              // add all the other events positions
-              for (let i=0; i < eventList.length; i++){
-                    positions.push( [eventList[i].coordinates.longitude, eventList[i].coordinates.latitude] );
-              }
-              //formatted dates for display
-              for (ev of eventsFromDB){
-                const starting = ev.timeAndDate.starting.toLocaleString();
-                const ending = ev.timeAndDate.ending.toLocaleString();
-                ev.starting = starting;
-                ev.ending = ending;
-                console.log(ev)
-              }
-            res.render("search", { eventList: eventList, word: searchTerm, positions: JSON.stringify(positions), centerLat: centerLat, centerLon: centerLon, user: loggedInUser });
+            if (eventList.length !== 0) {
+                  // center the map on the first event
+                  let centerLat = eventList[0].coordinates.latitude;
+                  let centerLon = eventList[0].coordinates.longitude;
+                  let positions = [];
+                  // add all the other events positions
+                  for (let i=0; i < eventList.length; i++){
+                        positions.push( [eventList[i].coordinates.longitude, eventList[i].coordinates.latitude] );
+                  }
+                  //formatted dates for display
+                  for (ev of eventsFromDB){
+                    const starting = ev.timeAndDate.starting.toLocaleString();
+                    const ending = ev.timeAndDate.ending.toLocaleString();
+                    ev.starting = starting;
+                    ev.ending = ending;
+                    console.log(ev)
+                  }
+                res.render("search", { eventList: eventList, word: searchTerm, positions: JSON.stringify(positions), centerLat: centerLat, centerLon: centerLon, user: loggedInUser });
+            } else {
+                const message = `No result for ${searchTerm}`
+                res.render("search", { eventList: eventList, word: searchTerm, user: loggedInUser, message: message });
+            }
+            
         })
         .catch(err => next(err));
 });
